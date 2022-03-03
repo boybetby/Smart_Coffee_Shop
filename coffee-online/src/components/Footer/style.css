@@ -1,0 +1,21 @@
+footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: rgba(162, 162, 162, 0.139);
+}
+
+footer div {
+  font-size: .8rem;
+  margin: 10px 50px;
+}
+
+footer div a {
+  color: #003d59;
+}
+/*# sourceMappingURL=style.css.map */

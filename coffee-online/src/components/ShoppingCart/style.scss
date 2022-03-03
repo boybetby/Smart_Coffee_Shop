@@ -1,0 +1,116 @@
+/* Position and sizing of burger button */
+.bm-burger-button {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    right: 10px;
+    top: 20px;
+    background-color: transparent;
+    border:none;
+    z-index: 2;
+
+  & :focus {
+      outline: none;
+  }
+  
+  .cart{
+      font-size: 2.5rem;
+      color: rgba(128, 128, 128, 0.413);
+      pointer-events: none;
+  }
+
+  .badge-counter-wrapper{
+    display: flex;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    font-weight: 500;
+    border-radius: 50%;
+    position: absolute;
+    background-color: rgb(255, 64, 64);
+    color: white;
+    bottom:7px;
+    left: 3px;
+  }
+  .quantity-none{
+    display: none;
+  }
+}
+
+  
+  /* Color/shape of burger icon bars */
+  .bm-burger-bars {
+    display: none;
+  }
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  
+  /* Color/shape of close button cross */
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  
+  /*
+  Sidebar wrapper styles
+  Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+  */
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+    
+    ::-webkit-scrollbar {
+        display: none;
+        }
+  }
+  
+  /* General sidebar styles */
+  .bm-menu {
+    background: #373a47;
+    padding-top: 2.5em;
+    font-size: 1.15em;
+  }
+  
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+  
+  /* Wrapper for item list */
+  .item-list{
+    height: calc(100% - 210px);
+    overflow: scroll;
+
+    .empty-state{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: rgb(237, 237, 237);
+      font-size: 1rem;
+
+      .empty-cart{
+        font-size: 2rem;
+        margin: .5rem;
+      }
+    }
+  }
+
+  .bm-item-list {
+    color: #b8b7ad;
+    & :focus{
+      outline: none;
+    }
+  }
+  
+  /* Individual item */
+  .bm-item {
+    display: inline-block;
+  }
+  
+  /* Styling of overlay */
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }

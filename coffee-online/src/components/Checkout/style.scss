@@ -1,0 +1,30 @@
+.checkout-container{
+    position: absolute;
+    width: 271px;
+    display: flex;
+    flex-direction: column;
+    padding: 0.8em;
+    background-color: #333541;
+
+    .total{
+        display: flex;
+        justify-content: space-between;
+        color: #eabf00;
+        margin-bottom: .5rem;
+    }
+
+    button{
+        background-color: white;
+        font-weight: 800;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        margin: .5rem 0 5rem 0;
+        cursor: pointer;
+        transition: background-color .2s ease;
+
+        &:hover{
+            background-color: #eabf00;
+        }
+    }
+}

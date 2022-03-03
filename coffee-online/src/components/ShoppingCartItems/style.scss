@@ -1,0 +1,49 @@
+.items-container{
+    border-top: 1px solid rgb(176, 176, 176);
+    margin: .5rem;
+    padding: .5rem 0;
+
+    button{
+        background-color: transparent;
+        min-width: 25px;
+        font-size: 1rem;
+        padding: .3rem;
+        border: 1px solid white;
+        color: white;
+    }
+
+    .remove-item, .add-item{
+        cursor: pointer;
+        
+        &:hover{
+            background-color: #252832;
+        }
+    }
+
+    .item-info{
+        display: flex;
+        justify-content: space-between;
+
+        .item-description{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+    }
+    .thumbnail-container{
+        width: 50px;
+        height: 50px;
+
+        .thumbnail-cart{
+            background-position: center;
+            background-size: 150%;
+            background-repeat: no-repeat;
+            height: 100%;
+        }
+    }
+
+    .buttons-container{
+        display: flex;
+        justify-content: flex-end;
+    }
+}

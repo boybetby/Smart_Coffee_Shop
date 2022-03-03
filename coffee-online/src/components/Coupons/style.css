@@ -1,0 +1,52 @@
+.coupons {
+    position: fixed;
+    right: 3rem;
+	bottom: 7.5rem;
+    width: 300px;
+    height: 350px;
+    border-radius: 20px;
+    background-color: lightgray;
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+}
+
+.coupons h2{ 
+    color: darkcyan;
+}
+
+.coupons a {
+    font-family: Roboto, sans-serif;
+    color: green;
+}
+
+.coupons a:hover {
+    font-family: Roboto, sans-serif;
+    color: darkgreen;
+}
+
+.btn-floating {
+	position: fixed;
+	right: 3rem;
+	bottom: 3rem;
+	background: transparent;
+	border: none;
+}
+
+.btn-floating:hover {
+	background: transparent;
+    border: 1px solid red;
+    border-radius: 100%;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+}
+
+.btn-floating:focus,
+.btn-floating:active {
+	outline: none;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}

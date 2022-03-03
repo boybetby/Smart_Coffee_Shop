@@ -1,0 +1,86 @@
+.shelf-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 85%;
+  min-height: 600px;
+  margin: 0 auto;
+}
+
+.shelf-container .shelf-item {
+  max-width: 300px;
+  position: relative;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 30px;
+  border: 1px solid transparent;
+  cursor: default;
+}
+
+.shelf-container .shelf-item:hover {
+  border: 1px solid #eee;
+}
+
+.shelf-container .shelf-item .image-container {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.shelf-container .shelf-item .image-container .thumbnail {
+  border-radius: 50%;
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 100%;
+  -webkit-transition: background-size ease .5s;
+  transition: background-size ease .5s;
+}
+
+.shelf-container .shelf-item .image-container .thumbnail:hover {
+  background-size: 130%;
+}
+
+.shelf-container .shelf-item .title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.shelf-container .shelf-item .description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  height: 6rem;
+  color: #767676;
+}
+
+.shelf-container .shelf-item .price {
+  margin-top: 1rem;
+  font-size: 1.3rem;
+}
+
+.shelf-container .shelf-item button {
+  margin-top: 1rem;
+  font-weight: 800;
+  background-color: #003d59;
+  color: white;
+  border: 1px solid rgba(128, 128, 128, 0.413);
+  padding: 12px 30px;
+  -webkit-transition: background-color .3s;
+  transition: background-color .3s;
+}
+
+.shelf-container .shelf-item button:hover {
+  background-color: #eabf00;
+  border: none;
+  cursor: pointer;
+}
+/*# sourceMappingURL=style.css.map */
