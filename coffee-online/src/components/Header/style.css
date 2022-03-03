@@ -11,9 +11,10 @@
 
 .container .logo {
   position: relative;
-  bottom: 50px;
-  height: 200px;
-  background-size: contain;
+  height: 80px;
+  width: 200px;
+  background-size: 100%;
   background-repeat: no-repeat;
+  background-position: left center;
 }
 /*# sourceMappingURL=style.css.map */

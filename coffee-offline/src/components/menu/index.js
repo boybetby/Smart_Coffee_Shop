@@ -1,16 +1,18 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
-import MenuList from './menulist/index'
+import MenuList from './MenuList/index'
+import MenuOrder from './MenuOrder'
+import './style.css'
 
 const Menu = () => {
   return (
     <Container>
         <Row>
-            <Col xs={8}>
+            <Col xs={9}>
                 <MenuList />
             </Col>
             <Col>
-                1 of 3
+                <MenuOrder />
             </Col>
         </Row>
     </Container>

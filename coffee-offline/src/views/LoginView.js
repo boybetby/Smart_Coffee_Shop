@@ -4,7 +4,7 @@ import LoginForm from '../components/loginform/index'
 const LoginView = () => {
   return (
       <div>
-          <LoginForm /> 
+          hello
       </div>
   )
 }

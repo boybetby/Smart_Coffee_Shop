@@ -3,7 +3,10 @@ const  drinkModel = require('../models/drink')
 const getDrinks = async (req, res) => {
   try {
     const drinks = await drinkModel.find();
-    res.status(200).json(drinks);
+    res.status(200).json({
+      success: true,
+      drinks
+    });
   } catch (err) {
     res.status(500).json({ error: err });
   }

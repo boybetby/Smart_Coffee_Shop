@@ -47,7 +47,7 @@ export const ShoppingProvider = props => {
                 method: 'get',
                 url:  `${apiUrl}/api/drink`,          
             });
-            setProductList({productList: response.data})
+            setProductList({productList: response.data.drinks})
         } catch (error) {
             console.log(error)
         }

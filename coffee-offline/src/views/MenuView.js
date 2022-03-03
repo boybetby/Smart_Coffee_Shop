@@ -5,15 +5,15 @@ import Menu from '../components/menu/index'
 
 const MenuView = () => {
   return (
-    <div>
+    <div style={{overflow: "hidden", height: "100vh"}}>
         <Header />
         <div style={{padding: "20px 0"}}>
           <Container>
             <Row>
-              <Col style={{ "border-right": "1px solid lightgray"}}>
+              <Col style={{ borderRight: "1px solid lightgray"}}>
                 Face Detection
               </Col>
-              <Col xs={9}>
+              <Col xs={10}>
                 <Menu />
               </Col>
             </Row>

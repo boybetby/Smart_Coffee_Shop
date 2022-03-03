@@ -1,8 +1,9 @@
-import React from 'react'
 import {
 	MENU_LOADED_SUCCESS,
 	MENU_LOADED_FAIL,
-    FIND_MENU
+    FIND_MENU,
+    ADD_ORDER,
+    UPDATE_ORDER
 } from './constants'
 
 
@@ -22,7 +23,17 @@ const menuReducer = (state, action) => {
                 menuLoading: false
             }
         case FIND_MENU:
-            return { ...state, post: payload }
+            return { ...state, drink: payload }
+        case ADD_ORDER:
+            return { 
+                ...state,
+                order: [ ...state.order, payload ]
+            }
+        case UPDATE_ORDER:
+            return {
+                ...state,
+                order: [ ...state.order ]
+            }    
         default:
             return state
     }

@@ -10,6 +10,7 @@
   width: 85%;
   min-height: 600px;
   margin: 0 auto;
+  padding: 50px 0;
 }
 
 .shelf-container .shelf-item {
@@ -57,7 +58,7 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 5;
   height: 6rem;
   color: #767676;
 }
