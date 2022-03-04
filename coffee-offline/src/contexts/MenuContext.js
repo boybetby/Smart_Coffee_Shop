@@ -48,11 +48,31 @@ const MenuContextProvider = ({ children }) => {
 		}
 	}
 
+	const addItem = drink => {
+        const item = menuState.order.find(item => item._id === drink._id)
+        item.quantity++
+		dispatch({ type: UPDATE_ORDER })
+    }
+
+    const removeItem = drink => {
+		const item = menuState.order.find(item => item._id === drink._id)
+        const itemIndex = menuState.order.indexOf(item)        
+        if(item.quantity > 1){
+            item.quantity--
+        } else {
+            menuState.order.splice(itemIndex, 1)
+        }
+		dispatch({ type: UPDATE_ORDER })
+    }
+
+
     const menuContextData = {
 		menuState,
         getMenu,
         findMenu,
-		addOrder
+		addOrder,
+		addItem,
+		removeItem
 	}
 
     return (
