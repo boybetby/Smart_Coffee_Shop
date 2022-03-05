@@ -1,7 +1,13 @@
 export const apiUrl = 'http://localhost:5000'
 
+//menu
 export const MENU_LOADED_SUCCESS = 'MENU_LOADED_SUCCESS'
 export const MENU_LOADED_FAIL = 'MENU_LOADED_FAIL'
 export const FIND_MENU = 'FIND_MENU'
 export const ADD_ORDER = 'ADD_ORDER'
 export const UPDATE_ORDER = 'UPDATE_ORDER'
+
+//face
+export const token = '4740ae6347b0172c01254ff55bae5aff5199f4446e7f6d643d40185b3f475145'
+export const DETECT_FACE = 'DETECT_FACE'
+export const DETECT_FACE_FAIL = 'DETECT_FACE_FAIL'

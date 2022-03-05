@@ -9,7 +9,7 @@ const MenuView = () => {
     <div style={{overflow: "hidden", height: "100vh"}}>
         <Header />
         <div style={{padding: "20px 0"}}>
-          <Container>
+          <div className='menuContainer'>
             <Row>
               <Col style={{ borderRight: "1px solid lightgray"}}>
                 <CustomerZone />
@@ -18,7 +18,7 @@ const MenuView = () => {
                 <Menu />
               </Col>
             </Row>
-          </Container>
+          </div>
         </div>
     </div>
   )

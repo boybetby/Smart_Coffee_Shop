@@ -1,7 +1,7 @@
 const express = require("express")
-
 const { getCustomers, authCustomer, registerCustomer,loginCustomer } = require('../controllers/customersController')
-const {verify} = require('../middlewares/auth')
+const { faceRecognite } = require('../faceRecognition/trainingData')
+const {verifyToken, verify} = require('../middlewares/auth')
 
 const router = express.Router();
 
@@ -13,5 +13,7 @@ router.post('/register', registerCustomer);
 
 router.post('/login', loginCustomer)
 
+//nhan dien khuon mat
+router.post('/detect' , verifyToken, faceRecognite)
 
 module.exports = router

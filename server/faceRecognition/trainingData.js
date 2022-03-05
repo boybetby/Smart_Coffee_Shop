@@ -1,9 +1,9 @@
 const fs = require('fs');
 const faceapi = require('face-api.js');
 const canvas = require('canvas')
+const path = require('path');
 
-const  studentModel = require('../models/student') 
-const  classModel = require('../models/class') 
+const  customerModel = require('../models/customer') 
 
 const { Canvas, Image, ImageData } = canvas
 
@@ -115,7 +115,9 @@ async function detect(tensor) {
     return result;
 }
 
-
+const renderFileAddress = (name) => {
+    return `../storedImage/${name}.jpeg`
+}
 
 const faceRecognite = async (req, res) => {
     try {        
@@ -123,8 +125,8 @@ const faceRecognite = async (req, res) => {
 
         var base64Data = data.base64.replace(/^data:image\/jpeg;base64,/, "");
 
-        fs.writeFile(`./storedImage/temp.jpeg`, base64Data, 'base64', function(err) {
-            
+        fs.writeFile( path.join(__dirname, renderFileAddress(data.name)), base64Data, 'base64', function(err) {
+            if(err) console.log(err)
         });
 
         await Promise.all([
@@ -133,54 +135,23 @@ const faceRecognite = async (req, res) => {
             faceapi.nets.faceRecognitionNet.loadFromDisk('./modelsTraining')
         ])
 
-        const REFERENCE_IMAGE = "./storedImage/temp.jpeg"
+        const REFERENCE_IMAGE = `./storedImage/${data.name}.jpeg`
         const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
         const detection = await faceapi.detectSingleFace(referenceImage).withFaceLandmarks().withFaceDescriptor()
         const getid = faceMatcher.findBestMatch(detection.descriptor)
 
-        const condition = {
-            studentId: getid._label
-        }
+        console.log(getid)
 
-        const student = await studentModel.findOne(condition)
+        // const condition = {
+        //     studentId: getid._label
+        // }
 
-        const id = student.studentId
+        // const customer = await customerModel.findOne(condition)
 
-        var date = new Date();
-        var currentDate = date
-        var currentDay = date.getDay()
-        var currentHour = date.getHours()
-
-        const Class = await classModel.findOne({
-            students: id,
-            dayOfWeek: currentDay,
-            startDate: {
-                $lt: currentDate
-            },
-            endDate: {
-                $gt: currentDate
-            },
-            startTime: {
-                $lt: currentHour
-            },
-            endTime: {
-                $gt: currentHour
-            }
-        })
-
-        if(!Class){
-            res.status(204).json({
-                success: false,
-                message: 'Student or Class not found!'
-            });
-        }
-        else {
-            res.status(200).json({
-                success: true,
-                student,
-                Class
-            });
-        }
+        // res.status(202).json({
+        //     success: true,
+        //     customer
+        // })
     } catch (error) {
         console.log(error)
         res.status(500).json({

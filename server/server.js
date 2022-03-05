@@ -29,7 +29,7 @@ const connectDB = async () => {
 }
 
 connectDB().then(() => {
-    // let data = readTrainingData()
+    let data = readTrainingData()
 })
 
 app.use(express.json());
