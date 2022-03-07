@@ -13,7 +13,7 @@ export const FaceContext = createContext()
 
 const FaceContextProvider = ({ children }) => {
     const [faceState, dispatch] = useReducer(faceReducer, {
-		customer: {},
+		customer: null,
         isDetecting: true
 	})
 
@@ -32,7 +32,7 @@ const FaceContextProvider = ({ children }) => {
                 }
             });
             if (response.data.success) {
-                dispatch({ type: DETECT_FACE, payload: response.data.customer })
+                dispatch({ type: DETECT_FACE, payload: response.data })
             }
             else {
                 dispatch({ type: DETECT_FACE_FAIL })

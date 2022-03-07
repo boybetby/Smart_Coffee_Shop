@@ -8,7 +8,6 @@ const Camera = () => {
     const webcamRef = React.useRef(null);
 
     const {
-        faceState: { customer },
         detectFace
     } = useContext(FaceContext)
 

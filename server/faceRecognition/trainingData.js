@@ -43,21 +43,23 @@ const readTrainingData = async(req, res) => {
         if (err) {
             console.log(err);
         }  
-        try {
-            console.log('Start reading data...')
-            let content = JSON.parse(data);
-            for (var x = 0; x < Object.keys(content).length; x++) {
-                for (var y = 0; y < Object.keys(content[x].descriptors).length; y++) {
-                    var results = Object.values(content[x].descriptors[y]);
-                    content[x].descriptors[y] = new Float32Array(results);
+        else {
+            try {
+                console.log('Start reading data...')
+                let content = JSON.parse(data);
+                for (var x = 0; x < Object.keys(content).length; x++) {
+                    for (var y = 0; y < Object.keys(content[x].descriptors).length; y++) {
+                        var results = Object.values(content[x].descriptors[y]);
+                        content[x].descriptors[y] = new Float32Array(results);
+                    }
                 }
-            }
-            if(!content) console.log('Reading JSON failed!')
-            faceMatcher = await createFaceMatcher(content);
-            console.log('Reading data done!')
-        } catch (error) {
-            console.log(error) 
-        }        
+                if(!content) console.log('Reading JSON failed!')
+                faceMatcher = await createFaceMatcher(content);
+                console.log('Reading data done!')
+            } catch (error) {
+                console.log(error) 
+            }  
+        }            
     });
 }
   
@@ -101,22 +103,12 @@ const trainingStart = async(req, res) => {
     
 }
 
-async function image(file) {
-    const decoded = tf.node.decodeImage(file);
-    // const casted = decoded.toFloat();
-    // const result = casted.expandDims(0);
-    // decoded.dispose();
-    // casted.dispose();
-    return decoded;
-}
-
-async function detect(tensor) {
-    const result = await faceapi.detectSingleFace(tensor).withFaceLandmarks().withFaceDescriptor()
-    return result;
-}
-
 const renderFileAddress = (name) => {
     return `../storedImage/${name}.jpeg`
+}
+
+const renderCustomerAddress = (id, name) => {
+    return `../uploads/${id}/${name}.jpeg`
 }
 
 const faceRecognite = async (req, res) => {
@@ -140,7 +132,29 @@ const faceRecognite = async (req, res) => {
         const detection = await faceapi.detectSingleFace(referenceImage).withFaceLandmarks().withFaceDescriptor()
         const getid = faceMatcher.findBestMatch(detection.descriptor)
 
-        console.log(getid)
+        if(getid._label === 'unknown'){
+            const newCustomer = new customerModel();
+            const foldername = renderCustomerAddress(newCustomer._id, data.name)
+            fs.mkdirSync(path.join(__dirname, `../uploads/${newCustomer._id}`));
+            fs.writeFile( path.join(__dirname, foldername), base64Data, 'base64', function(err) {
+                if(err) console.log(err)
+            });
+            newCustomer.customerImages = foldername
+            await newCustomer.save()
+            res.status(200).json({
+                success: true,
+                existedCustomer: false,
+                message: 'This is new customer'
+            })
+        } else {
+            const id = getid._label
+            const detectedCustomer = await customerModel.findById(id.toString())
+            res.status(202).json({
+                success: true,
+                existedCustomer: true,
+                detectedCustomer
+            })
+        }
 
         // const condition = {
         //     studentId: getid._label
