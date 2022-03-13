@@ -39,7 +39,7 @@ const readTrainingData = async(req, res) => {
         faceapi.nets.faceRecognitionNet.loadFromDisk('./modelsTraining')
     ])
 
-    fs.readFile('./faceRecognition/trainingData.json', async (err, data) => {  
+    fs.readFile('./faceRecognition/trainingData.json', async (err, data) => {
         if (err) {
             console.log(err);
         }  
@@ -71,7 +71,7 @@ async function createFaceMatcher(data) {
         }
         return new faceapi.LabeledFaceDescriptors(className.label, descriptors);
     }))
-    return new faceapi.FaceMatcher(labeledFaceDescriptors);
+    return new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4);
 }
 
 const trainingStart = async(req, res) => {
@@ -112,9 +112,8 @@ const renderCustomerAddress = (id, name) => {
 }
 
 const faceRecognite = async (req, res) => {
-    try {        
+    try {
         const data = req.body
-
         var base64Data = data.base64.replace(/^data:image\/jpeg;base64,/, "");
 
         fs.writeFile( path.join(__dirname, renderFileAddress(data.name)), base64Data, 'base64', function(err) {
@@ -144,7 +143,8 @@ const faceRecognite = async (req, res) => {
             res.status(200).json({
                 success: true,
                 existedCustomer: false,
-                message: 'This is new customer'
+                message: 'This is new customer',
+                detectedCustomer: newCustomer
             })
         } else {
             const id = getid._label
@@ -155,17 +155,6 @@ const faceRecognite = async (req, res) => {
                 detectedCustomer
             })
         }
-
-        // const condition = {
-        //     studentId: getid._label
-        // }
-
-        // const customer = await customerModel.findOne(condition)
-
-        // res.status(202).json({
-        //     success: true,
-        //     customer
-        // })
     } catch (error) {
         console.log(error)
         res.status(500).json({

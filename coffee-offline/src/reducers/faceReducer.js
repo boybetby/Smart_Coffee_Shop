@@ -1,6 +1,8 @@
 import {
 	DETECT_FACE,
-    DETECT_FACE_FAIL
+    DETECT_FACE_FAIL,
+    DETECTING,
+    GET_CUSTOMER_ORDER
 } from './constants'
 
 
@@ -10,14 +12,22 @@ const menuReducer = (state, action) => {
         case DETECT_FACE: 
             return {
                 ...state,
-				customer: payload,
-				isDetecting: false
+				customer: payload
             }
         case DETECT_FACE_FAIL:
             return {
                 ...state,
-                customer: 'Can not detect this customer',
-				isDetecting: false
+                customer: 'Can not detect this customer'
+            }
+        case DETECTING:
+            return {
+                ...state,
+                isDetecting: payload
+            }
+        case GET_CUSTOMER_ORDER:
+            return {
+                ...state,
+                customerOrder: payload
             }
         default:
             return state

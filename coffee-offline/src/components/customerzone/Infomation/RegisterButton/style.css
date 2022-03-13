@@ -1,0 +1,9 @@
+.registerButton {
+    display: grid;
+    justify-items: center;
+}
+
+.registerButton button {
+    width: 80%;
+    font-size: 15px;
+}

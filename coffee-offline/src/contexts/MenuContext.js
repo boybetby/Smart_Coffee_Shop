@@ -7,6 +7,7 @@ import {
 	MENU_LOADED_FAIL,
     FIND_MENU,
 	ADD_ORDER,
+	CLEAR_ORDER,
 	UPDATE_ORDER
 }from '../reducers/constants'
 
@@ -65,14 +66,36 @@ const MenuContextProvider = ({ children }) => {
 		dispatch({ type: UPDATE_ORDER })
     }
 
+	const makeOrder = async(input) => {
+		try {
+			const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/order/orderoffline`,
+                data: {
+                  id: input.id,
+                  order: input.order,
+				  totalPrice: input.totalPrice
+                }
+            });
+			return response.data
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const clearOrder = () => {
+		dispatch({ type: CLEAR_ORDER })
+	}
 
     const menuContextData = {
 		menuState,
         getMenu,
         findMenu,
 		addOrder,
+		clearOrder,
 		addItem,
-		removeItem
+		removeItem,
+		makeOrder
 	}
 
     return (

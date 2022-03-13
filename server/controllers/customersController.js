@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const  customerModel = require('../models/customer') 
+const orderModel = require('../models/order')
 const argon2 = require('argon2')
 const jwt = require('jsonwebtoken');
 
@@ -12,6 +13,77 @@ const getCustomers = async (req, res) => {
     res.status(500).json({ error: err });
   }
 };
+
+const getOrder = async(req, res) => {
+  try {
+    const orders = await orderModel.find({
+      '_id': {
+        $in: req.body.orderlist
+      }
+    }).select('drinks -_id')
+    let customerOrder = []
+    orders.forEach(drinks => {
+      drinks.drinks.forEach(drink => {
+        const find = customerOrder.find(a => a._id === drink.id)
+        if(find) {
+              find.quantity += drink.quantity
+        }
+        else {
+          customerOrder.push(drink)
+        }
+      })
+    })
+    res.status(202).json({
+      success: true,
+      customerOrder
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    })
+  }
+}
+
+const getAllOrders = async(req, res) => {
+  try {
+      let customersOrders = []
+      const customers = await customerModel.find()
+      for(const customer of customers) {
+        const orders = await orderModel.find({
+          '_id': {
+            $in: customer.orders
+          }
+        })
+        let customerOrder = {
+          customer: '',
+          orders: []
+        }
+        orders.forEach(drinks => {
+          drinks.drinks.forEach(drink => {
+            const find = customerOrder.orders.find(a => a._id === drink.id)
+            if(find) {
+                  find.quantity += drink.quantity
+            }
+            else {
+              customerOrder.orders.push(drink)
+            }
+          })
+        })
+        customerOrder.customer = customer.username
+        customersOrders.push(customerOrder)
+      }
+      res.status(202).json({
+        success: true,
+        customersOrders
+      })
+    } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    })
+  }
+}
 
 const authCustomer = async (req, res) => {
   try {
@@ -105,7 +177,11 @@ const registerCustomer = async (req, res) => {
           accessToken
         })
       }
-
+      if(customer && customer.isCreated && !customer.passwordChanged) {
+        return res
+          .status(200)
+          .json({ success: false, message: 'Account is created, please use password we sent to use to login' })
+      }
       // All good
       const newcustomer = new customerModel({ 
         username: username,
@@ -121,7 +197,7 @@ const registerCustomer = async (req, res) => {
         { customerId: newcustomer._id },
         process.env.ACCESS_TOKEN_SECRET
       )
-  
+      
       res.json({
         success: true,
         message: 'customer created successfully',
@@ -133,6 +209,68 @@ const registerCustomer = async (req, res) => {
     }
 }
 
+const updateCustomer = async (req, res) => {
+    const newPassword = await argon2.hash('123456')
+    try {
+      const updateCustomer = {
+        _id: req.body.id,
+        customerName: req.body.name,
+        username: req.body.phonenumber,
+        password: newPassword
+      };
 
+      const findCustomer = await customerModel.findOne({
+        username: updateCustomer.username
+      })
 
-module.exports = { getCustomers, authCustomer, registerCustomer, loginCustomer }
+      if(findCustomer) {
+        const customer = await customerModel.findOneAndUpdate(
+          { _id: updateCustomer._id },
+          {
+            customerName: updateCustomer.customerName,
+            username: updateCustomer.username,
+            password: findCustomer.password,
+            orders: findCustomer.orders,
+            coupons: findCustomer.coupons,
+            isCreated: true,
+            passwordChanged: true
+          },
+          { new: true }
+        );
+        await customerModel.findOneAndRemove(findCustomer)
+        res.status(202).json({
+          success: true,
+          message: 'Customer updated',
+          customer
+        })
+      }
+      else {
+        const customer = await customerModel.findOneAndUpdate(
+          { _id: updateCustomer._id },
+          {
+            customerName: updateCustomer.customerName,
+            username: updateCustomer.username,
+            password: updateCustomer.password,
+            isCreated: true
+          },
+          { new: true }
+        );
+        res.status(202).json({
+          success: true,
+          message: 'Customer updated',
+          customer
+        })
+      }
+      
+      res.status(202).json({
+        success: true,
+        message: 'Customer updated',
+        customer
+      })
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({ success: false, message: 'Internal server error' })
+    }
+}
+
+module.exports = { getCustomers, getOrder, getAllOrders, authCustomer, registerCustomer, loginCustomer, updateCustomer }

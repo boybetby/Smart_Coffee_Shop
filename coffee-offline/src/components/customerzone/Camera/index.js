@@ -13,7 +13,7 @@ const Camera = () => {
 
     const handleClick = async() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        detectFace(imageSrc)
+        await detectFace(imageSrc)
     }
 
     return (

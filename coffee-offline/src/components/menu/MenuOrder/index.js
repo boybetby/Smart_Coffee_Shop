@@ -17,7 +17,7 @@ const MenuOrder = () => {
         <div className='order-container'>
             <div className='order_list'>
                 {order.map(item => (
-                    <div className="items-container">
+                    <div className="items-container" key={item._id}>
                         <div className="item-info">
                             <div className="item-description">
                                 <div className="title-cart">{item.drinkName}</div>

@@ -1,6 +1,7 @@
 import {
 	MENU_LOADED_SUCCESS,
 	MENU_LOADED_FAIL,
+    CLEAR_ORDER,
     FIND_MENU,
     ADD_ORDER,
     UPDATE_ORDER
@@ -28,6 +29,11 @@ const menuReducer = (state, action) => {
             return { 
                 ...state,
                 order: [ ...state.order, payload ]
+            }
+        case CLEAR_ORDER:
+            return {
+                ...state,
+                order: []
             }
         case UPDATE_ORDER:
             return {

@@ -37,8 +37,6 @@ const findOrder = async (req, res) => {
   }
 }
 
-
-
 const createOrderOnline = async (req, res) => {
   try {
     // const newOrder = req.body;
@@ -90,6 +88,51 @@ const createOrderOnline = async (req, res) => {
   }
 };
 
+const createOrderOffline = async (req, res) => {
+  try {
+    // const newOrder = req.body;
+    if(!req.body.order){
+      res.status(400).json({
+        success: false,
+        message: "No product ordered"
+      })
+    }
+    const findCustomer = await customerModel.findById(req.body.id)
+    
+    let newOrder = new orderModel({
+      customer: findCustomer.username,
+      customerName: findCustomer.customerName,
+      drinks: req.body.order,
+      totalPrice: req.body.totalPrice,
+      type: 'OFFLINE',
+    })
+
+    const order = new orderModel(newOrder);
+    await order.save();
+
+    const updateCustomerOrders = await customerModel.findOneAndUpdate(
+      {
+          username: findCustomer.username
+      },
+      {
+          $push: {
+            orders: order._id
+          }
+      },
+      {
+          new: true
+      }
+    )
+
+    res.status(200).json({
+      success: true,
+      order
+    });
+  } catch (err) {
+    res.status(500).json({ error: err});
+  }
+};
+
 const updateOrder = async (req, res) => {
   try {
     const updateOrder = req.body;
@@ -106,6 +149,8 @@ const updateOrder = async (req, res) => {
     });
   }
 };
+
+
 
 const deleteOrder = async(req, res) => {
   try {
@@ -139,4 +184,4 @@ const deleteOrder = async(req, res) => {
 }
 
 
-module.exports = {getOrders, createOrderOnline, updateOrder, deleteOrder, findOrder}
+module.exports = {getOrders, createOrderOnline, createOrderOffline, updateOrder, deleteOrder, findOrder}
