@@ -4,6 +4,7 @@ const  customerModel = require('../models/customer')
 const fs = require('fs');
 const path = require('path');
 
+//fetch customers with more than 0 order
 const getCustomers = async(dataMatrix) => {
     try {
         const customers = dataMatrix.filter(e => e.orders.length>0).map(e => e._id)
@@ -13,6 +14,7 @@ const getCustomers = async(dataMatrix) => {
     }
 }
 
+//fetch orders and format to { _id: '', customer: '', orders: [] }
 const getOrders = async() => {
     try {
         let customersOrders = []
@@ -49,6 +51,7 @@ const getOrders = async() => {
     }
 }
 
+//fetch all products
 const getDrinks = async() => {
     try {
         const drinks = await drinkModel.find();
@@ -58,7 +61,7 @@ const getDrinks = async() => {
     }
 };
 
-//create matrix from users's orders data
+//create data from formated orders and products
 const createDataMatrix = (data, products) => {
     const dataMatrix = data
     dataMatrix.map(user => {
@@ -80,7 +83,8 @@ const createDataMatrix = (data, products) => {
     return dataMatrix
 }
 
-//soft datamatrix by _id and filter with only quantity
+//soft data by _id and format with only quantity
+//data becomes 2d matrix
 const createFilterDataMatrix = (dataMatrix) => {
     let filterDataMatrix = []
     dataMatrix.map(items => {
@@ -95,7 +99,6 @@ const createFilterDataMatrix = (dataMatrix) => {
     return filterDataMatrix
 }
 
-//calculating 2 array distance using cosin
 function dotp(x, y) {
     function dotp_sum(a, b) {
       return a + b;
@@ -110,6 +113,7 @@ function cosineSimilarity(A,B){
     return similarity;
 }
 
+//calculating 2 array distance using cosin
 const createCosineSimilarityMatrix = (filterDataMatrix) => {
     //create similarity matrix using cosin 
     cosineSimilarityMatrix = []
@@ -122,6 +126,7 @@ const createCosineSimilarityMatrix = (filterDataMatrix) => {
     })
     return cosineSimilarityMatrix
 }
+
 
 let decor = (v, i) => [v, i];
 let undecor = a => a[1];
@@ -140,6 +145,7 @@ function getArray(table1, table2)
     return out;
 }
 
+//predict score how a customer would like product
 const predict = (A, u, i) => {
     const k = 2
     const user_rated_i = []
@@ -160,6 +166,7 @@ const predict = (A, u, i) => {
     return Math.round(r_bar)
 }
 
+//find score 0 of 2d matrix and predict score
 const createPredictMatrix = (filterDataMatrix, cosineSimilarityMatrix) => {
     var predict_matrix = filterDataMatrix.map(function(arr) {
         return arr.slice();
@@ -189,9 +196,11 @@ const matrixToJSON = (predictMatrix, customers) => {
     return objectJSON
 }
 
+//@function to start training data
 const main = async(req, res) => {
     try { 
         const data = await getOrders()
+
         const products = await getDrinks()
     
         const dataMatrix = createDataMatrix(data, products)
@@ -207,16 +216,13 @@ const main = async(req, res) => {
         const matrixJSON = await matrixToJSON(predictMatrix, customers)
 
         try {
-            fs.writeFileSync('./productRecommendation/data.json', JSON.stringify(matrixJSON), function(err) {
-                if(err) console.log(err)
-            }
-        );
+            fs.writeFileSync('./productRecommendation/data.json', JSON.stringify(matrixJSON));
         } catch (error) {
             console.log(error)
         }
 
         res.status(202).json({
-            data
+            matrixJSON
         })
     } catch (error) {
         res.status(500).json({
@@ -226,6 +232,7 @@ const main = async(req, res) => {
     }
 }
 
+//fetch customer's order by id
 const getCustomerOrder = async(orders, customer) => {
     const products = await getDrinks()
     let customerOrder = {
@@ -265,6 +272,7 @@ const getCustomerOrder = async(orders, customer) => {
     return customerOrder
 }
 
+//find recommedation based on customer and matrix
 const findRecommedation = (customerOrder, customerMatrixJSON) => {
     const productsScore = []
     customerOrder.orders.map(order => {
@@ -286,6 +294,7 @@ const findRecommedation = (customerOrder, customerMatrixJSON) => {
     return productsScore.slice(0,3)
 }
 
+//@API FOR FONT-END
 const getProductRecommendation = async(req, res) => {
     try {
         const _id = req.body.id
