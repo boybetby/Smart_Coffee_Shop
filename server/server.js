@@ -17,6 +17,7 @@ const drinkRouter = require('./routers/drinkRouter')
 const orderRouter = require('./routers/orderRouter')
 
 const { trainingStart, readTrainingData } = require('./faceRecognition/trainingData')
+const { main } = require('./productRecommendation/ML')
 
 const connectDB = async () => {
     try {
@@ -47,6 +48,7 @@ app.use('/api/order', orderRouter)
 app.use('/api/customer', customerRouter)
 
 app.use('/trainingdata', trainingStart)
+app.use('/tranningmachinelearning', main)
 
 app.use('/drinks', express.static('drinks'));
 

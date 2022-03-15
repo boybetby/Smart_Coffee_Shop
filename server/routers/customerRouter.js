@@ -2,6 +2,7 @@ const express = require("express")
 const { getCustomers, getOrder, getAllOrders, authCustomer, registerCustomer,loginCustomer, updateCustomer } = require('../controllers/customersController')
 const { faceRecognite } = require('../faceRecognition/trainingData')
 const {verifyToken, verify} = require('../middlewares/auth')
+const { getProductRecommendation } = require('../productRecommendation/ML')
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.post('/update', updateCustomer)
 router.post('/getorder', getOrder)
 
 router.get('/getallorders', getAllOrders)
+
+router.post('/getProductRecommentdation', getProductRecommendation)
 
 //nhan dien khuon mat
 router.post('/detect' , verifyToken, faceRecognite)
