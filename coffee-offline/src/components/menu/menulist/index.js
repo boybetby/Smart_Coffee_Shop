@@ -14,7 +14,6 @@ const MenuList = () => {
     getMenu()
   }, [])
   
-
   let menuBody = null
   if(menu){
     menuBody = (
