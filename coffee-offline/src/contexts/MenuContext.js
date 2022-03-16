@@ -15,7 +15,7 @@ export const MenuContext = createContext()
 
 const MenuContextProvider = ({ children }) => {
     const [menuState, dispatch] = useReducer(menuReducer, {
-		drink: null,
+		find_drink: null,
 		menu: [],
 		order: [],
 		menuLoading: true

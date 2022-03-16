@@ -47,6 +47,7 @@ app.use('/api/drink', drinkRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/customer', customerRouter)
 
+//@admin
 app.use('/trainingdata', trainingStart)
 app.use('/tranningmachinelearning', main)
 

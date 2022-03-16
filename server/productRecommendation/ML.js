@@ -2,7 +2,6 @@ const orderModel = require('../models/order')
 const  drinkModel = require('../models/drink') 
 const  customerModel = require('../models/customer') 
 const fs = require('fs');
-const path = require('path');
 
 //fetch customers with more than 0 order
 const getCustomers = async(dataMatrix) => {
@@ -166,7 +165,7 @@ const predict = (A, u, i) => {
     return Math.round(r_bar)
 }
 
-//find score 0 of 2d matrix and predict score
+//find score with value 0 of 2d matrix and predict score
 const createPredictMatrix = (filterDataMatrix, cosineSimilarityMatrix) => {
     var predict_matrix = filterDataMatrix.map(function(arr) {
         return arr.slice();
@@ -298,17 +297,29 @@ const findRecommedation = (customerOrder, customerMatrixJSON) => {
 const getProductRecommendation = async(req, res) => {
     try {
         const _id = req.body.id
-
+        
         const customer = await customerModel.findById(_id)
         const orders = await orderModel.find({
             '_id': {
                 $in: customer.orders
             }
         })
-        
+
         const customerOrder = await getCustomerOrder(orders, customer)
 
-        const rawdata = fs.readFileSync('./productRecommendation/data.json');
+        const count = customerOrder.orders.filter(product => product.quantity > 0)
+
+        if(count.lenght < 2) {
+            const products = await drinkModel.find().sort({createAt:-1}).limit(3)
+            res.status(202).json({
+                success: true,
+                products,
+                message: 'You need to buy more to get recommended'
+            })   
+        }
+    
+        const rawdata = await fs.readFileSync('./productRecommendation/data.json');
+        
         const matrixJSON = JSON.parse(rawdata);
         const customerMatrixJSON = matrixJSON.find(e => e._id === _id)
 

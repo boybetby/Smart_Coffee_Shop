@@ -24,7 +24,7 @@ const menuReducer = (state, action) => {
                 menuLoading: false
             }
         case FIND_MENU:
-            return { ...state, drink: payload }
+            return { ...state, find_drink: payload }
         case ADD_ORDER:
             return { 
                 ...state,

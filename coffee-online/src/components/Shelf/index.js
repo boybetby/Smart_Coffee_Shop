@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { ShoppingContext } from '../ShoppingContext/ShoopingContext'
 import Coupons from '../Coupons/index'
+import Recommendation from '../Recommendation/index'
 
 import './style.scss'
-
 
 const Shelf = () => {
     const {productList, cartProducts, setCartProducts} = useContext(ShoppingContext)
@@ -25,6 +25,7 @@ const Shelf = () => {
 
     return (
         <div>
+            <Recommendation />
             <div className="shelf-container">
                 {productList.productList.map(product => 
                     <div className="shelf-item" key={product._id}>

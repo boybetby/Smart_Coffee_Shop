@@ -5,7 +5,7 @@ import './style.css'
 
 const MenuList = () => {
   const {
-    menuState: { drink, menu, menuLoading },
+    menuState: { find_drink, menu, menuLoading },
     getMenu,
   } = useContext(MenuContext)
 
