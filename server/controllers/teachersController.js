@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const  teacherModel = require('../models/teacher') 
+const teacherModel = require('../models/teacher') 
 const classModel = require('../models/class')
 const argon2 = require('argon2')
 const jwt = require('jsonwebtoken');
