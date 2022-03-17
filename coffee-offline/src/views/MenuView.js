@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 import Header from '../components/header/index'
 import Menu from '../components/menu/index'
 import CustomerZone from '../components/customerzone'

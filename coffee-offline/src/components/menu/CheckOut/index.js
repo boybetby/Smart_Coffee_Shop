@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { MenuContext } from '../../../contexts/MenuContext'
 import { FaceContext } from '../../../contexts/FaceContext'
+import swal from 'sweetalert'
 import './style.css'
 
 const CheckOut = () => {
@@ -33,7 +34,22 @@ const CheckOut = () => {
             totalPrice: calculateTotal()
         }
         const reponse = await makeOrder(input)
-        console.log(reponse)
+        if(reponse.success) {
+            swal({
+                title: "SUCCESS!",
+                text: "Order has been placed",
+                icon: "success",
+                button: "OK",
+            })
+        }
+        else {
+            swal({
+                title: "OH NO!",
+                text: "Something has gone wrong",
+                icon: "error",
+                button: "Try again",
+            });
+        }
         clearOrder()
     }
 

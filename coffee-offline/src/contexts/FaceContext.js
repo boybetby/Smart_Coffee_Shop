@@ -8,7 +8,9 @@ import {
 	DETECT_FACE,
     DETECT_FACE_FAIL,
     DETECTING,
-    GET_CUSTOMER_ORDER
+    GET_CUSTOMER_ORDER,
+    GET_CUSTOMER_RECOMMENDATION,
+    CLEAR_CUSTOMER_RECOMMENDATION
 } from '../reducers/constants'
 
 export const FaceContext = createContext()
@@ -17,12 +19,14 @@ const FaceContextProvider = ({ children }) => {
     const [faceState, dispatch] = useReducer(faceReducer, {
 		customer: null,
         customerOrder: [],
+        customerRecommendation: null,
         isDetecting: false
 	})
 
     const [showRegisterModal, setShowRegisterModal] = useState(false)
 
     const detectFace = async(base64) => {
+        clearRecommendation()
         dispatch({ type: DETECTING, payload: true })
         const today = moment(Date().toLocaleString()).format("DDMMYYYYHHmm");
         try {
@@ -41,6 +45,7 @@ const FaceContextProvider = ({ children }) => {
                 dispatch({ type: DETECT_FACE, payload: response.data })
                 dispatch({ type: DETECTING, payload: false })
                 getCustomersOrder(response.data.detectedCustomer.orders)
+                getCustomersRecommendation(response.data.detectedCustomer._id)
             }
             else {
                 dispatch({ type: DETECT_FACE_FAIL })
@@ -59,11 +64,33 @@ const FaceContextProvider = ({ children }) => {
                     orderlist: orderlist
                 }
             });
-            dispatch({ type: GET_CUSTOMER_ORDER, payload: response.data.customerOrder })
+            const orders = response.data.customerOrder.sort((a, b) => (a.quantity < b.quantity) ? 1 : -1).slice(0, 3)
+            dispatch({ type: GET_CUSTOMER_ORDER, payload: orders })
         } catch (error) {
-            
+            console.error(error);
         }
     }
+
+    const getCustomersRecommendation = async(id) => {
+        try {
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/customer/getProductRecommentdation`,
+                data: {
+                    id: id
+                }
+            });
+            if(response.data.success) {
+                dispatch({ type: GET_CUSTOMER_RECOMMENDATION, payload: response.data.result })
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const clearRecommendation = () => {
+		dispatch({ type: CLEAR_CUSTOMER_RECOMMENDATION })
+	}
 
     const RegisterCustomer = async(id, customer) => {
         try {
