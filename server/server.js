@@ -15,6 +15,7 @@ const PORT = 5000
 const customerRouter = require('./routers/customerRouter')
 const drinkRouter = require('./routers/drinkRouter')
 const orderRouter = require('./routers/orderRouter')
+const userRouter = require('./routers/userRouter')
 
 const { trainingStart, readTrainingData } = require('./faceRecognition/trainingData')
 const { main } = require('./productRecommendation/ML')
@@ -46,6 +47,7 @@ app.use('/api/customer', customerRouter)
 app.use('/api/drink', drinkRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/customer', customerRouter)
+app.use('/api/user', userRouter)
 
 //@admin
 app.use('/trainingdata', trainingStart)
