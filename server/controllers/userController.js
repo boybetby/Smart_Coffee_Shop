@@ -30,7 +30,7 @@ const loginUser = async (req, res) => {
         // Return token
         const accessToken = jwt.sign(
             { userId: user._id },
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.ACCESS_TOKEN_USER
         )
 
         res.json({
@@ -76,7 +76,7 @@ const registerUser = async (req, res) => {
         // Return token
         const accessToken = jwt.sign(
             { userId: newUser._id },
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.ACCESS_TOKEN_USER
         )
         
 
