@@ -13,8 +13,7 @@ const getOrders = async (req, res) => {
 
 
 const findOrder = async (req, res) => {
-  try {
-    const {orderId} = req.body
+  try {const {orderId} = req.body
 
     const order = await orderModel.findOne({orderId})
     if(!order){
@@ -184,4 +183,4 @@ const deleteOrder = async(req, res) => {
 }
 
 
-module.exports = {getOrders, createOrderOnline, createOrderOffline, updateOrder, deleteOrder, findOrder}
+module.exports = { getOrders, createOrderOnline, createOrderOffline, updateOrder, deleteOrder, findOrder}

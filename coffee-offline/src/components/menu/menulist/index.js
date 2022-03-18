@@ -5,14 +5,14 @@ import './style.css'
 
 const MenuList = () => {
   const {
-    menuState: { find_drink, menu, menuLoading },
+    menuState: { find_drink, menu },
     getMenu,
   } = useContext(MenuContext)
 
 
 	useEffect(() => {
     getMenu()
-  }, [])
+  })
   
   let menuBody = null
   if(menu){

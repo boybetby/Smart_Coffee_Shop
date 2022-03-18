@@ -4,6 +4,18 @@ const argon2 = require('argon2')
 const userModel = require('../models/user')
 const jwt = require('jsonwebtoken');
 
+const loadUser =  async (req, res) => {
+    try {
+		const user = await userModel.findById(req.userId).select('-password')
+		if (!user)
+			return res.status(400).json({ success: false, message: 'User not found' })
+		res.json({ success: true, user })
+	} catch (error) {
+		console.log(error)
+		res.status(500).json({ success: false, message: 'Internal server error' })
+	}
+}
+
 const loginUser = async (req, res) => {
     const { username, password } = req.body
       // Simple validation
@@ -91,4 +103,6 @@ const registerUser = async (req, res) => {
     }
 }
 
-module.exports = { loginUser, registerUser }
+
+
+module.exports = { loginUser, registerUser, loadUser }

@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
+import { AuthContext } from '../../contexts/AuthContext'
 import './style.css'
 
 const Header = () => {
+  const {
+		authState: { user },
+    logoutUser
+	} = useContext(AuthContext)
+
   return (
     <div>
       <Navbar>
@@ -12,7 +18,7 @@ const Header = () => {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              Signed in as: <a href="#login">Mark Otto</a>
+              Signed in as: <a href="/" onClick={logoutUser} title="CLICK HERE TO LOGOUT">{user.name}</a>
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>

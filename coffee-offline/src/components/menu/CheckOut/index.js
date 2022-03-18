@@ -28,6 +28,9 @@ const CheckOut = () => {
     }
 
     const handleOrder = async() => {
+        if(!customer) {
+            alert('No customer!')
+        }
         const input = {
             id: customer.detectedCustomer._id,
             order: order,

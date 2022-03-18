@@ -1,9 +1,10 @@
 const express = require("express")
-const { loginUser, registerUser } = require('../controllers/userController')
-const {verifyToken, verify} = require('../middlewares/auth')
+const { loginUser, registerUser, loadUser } = require('../controllers/userController')
+const { verifyUser } = require('../middlewares/auth')
 
 const router = express.Router();
 
+router.get('/', verifyUser, loadUser)
 
 router.post('/register', registerUser);
 
