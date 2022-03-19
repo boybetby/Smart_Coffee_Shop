@@ -1,10 +1,31 @@
+import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Box, Button, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { Dropdown } from 'react-bootstrap';
 
 export const Sales = (props) => {
+  const [buttonState, setButtonState] = useState('Last 7 days');
   const theme = useTheme();
+
+  const handleClick = (e) => {
+    let req = {
+      number,
+      type,
+      dateType
+    }
+    switch(e) {
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+    }
+  }
 
   const data = {
     datasets: [
@@ -85,12 +106,18 @@ export const Sales = (props) => {
     <Card {...props}>
       <CardHeader
         action={(
-          <Button
-            endIcon={<ArrowDropDownIcon fontSize="small" />}
-            size="small"
-          >
-            Last 7 days
-          </Button>
+          <Dropdown onSelect={(e) => handleClick(e)} >
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              {buttonState}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu >
+              <Dropdown.Item eventKey="1">Last 7 days</Dropdown.Item>
+              <Dropdown.Item eventKey="2">Last 30 days</Dropdown.Item>
+              <Dropdown.Item eventKey="3">Last 6 months</Dropdown.Item>
+              <Dropdown.Item eventKey="4">Last 12 months</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         )}
         
         title="Latest Sales"
