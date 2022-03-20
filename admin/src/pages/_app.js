@@ -6,7 +6,8 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
-import ReportContextProvider from 'src/components/contexts/reportContext';
+import ReportContextProvider from '../contexts/reportContext';
+import './customStyle.css'
 
 const clientSideEmotionCache = createEmotionCache();
 

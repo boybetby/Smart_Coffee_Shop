@@ -3,6 +3,7 @@
     padding-top: 50px;
     text-align: center;
     background-color: lightgray;
+    border-radius: 5px;
 }
 
 .recommendation_zone h1 {

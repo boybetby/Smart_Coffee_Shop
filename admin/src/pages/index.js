@@ -10,18 +10,18 @@ import { TotalProfit } from '../components/dashboard/total-profit';
 import { TrafficByDevice } from '../components/dashboard/traffic-by-device';
 import { DashboardLayout } from '../components/dashboard-layout';
 import React, { useContext } from 'react'
-import { ReportContext } from '../components/contexts/reportContext';
+import { ReportContext } from '../contexts/reportContext';
 import Spinner from 'react-bootstrap/Spinner'
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const Dashboard = () =>{ 
   const {
-    reportState: { reportLoading },
+    reportState: { reportLoading, reportbyFilterLoading },
   } = useContext(ReportContext)
   
   let body = (
     <div className='spinner-container'>
-				<Spinner animation='border' variant='info' />
+				<Spinner animation='border' variant='info'/>
     </div>
   )
 

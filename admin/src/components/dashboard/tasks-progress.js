@@ -1,7 +1,7 @@
 import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material';
 import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 import React, { useContext } from 'react'
-import { ReportContext } from '../contexts/reportContext';
+import { ReportContext } from '../../contexts/reportContext';
 
 export const TasksProgress = (props) => {
   const {

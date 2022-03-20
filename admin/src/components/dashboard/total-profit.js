@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { ReportContext } from '../contexts/reportContext';
+import { ReportContext } from '../../contexts/reportContext';
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
@@ -8,8 +8,10 @@ export const TotalProfit = (props) => {
     reportState: { incomeReport }
   } = useContext(ReportContext)
 
-  const format = num => 
-  String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.')
+  // const format = num => 
+  // String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.')
+
+  let formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
   return (
     <Card {...props}>
@@ -31,7 +33,7 @@ export const TotalProfit = (props) => {
                 color="textPrimary"
                 variant="h4"
               >
-                {format(incomeReport.both.bothTotalIncome)} VND
+                {formatter.format(incomeReport.both.bothTotalIncome)} VND
               </Typography>
             </Grid>
             <Grid item>

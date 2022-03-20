@@ -2,7 +2,7 @@ import { Avatar, Box, Card, CardContent, Grid, Typography } from '@mui/material'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import React, { useContext } from 'react'
-import { ReportContext } from '../contexts/reportContext';
+import { ReportContext } from '../../contexts/reportContext';
 
 export const TotalCustomers = (props) => {
   const {

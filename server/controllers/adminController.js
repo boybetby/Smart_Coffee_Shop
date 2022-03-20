@@ -1,6 +1,7 @@
 const orderModel = require('../models/order') 
 const customerModel = require('../models/customer')
 const { startOfDay, endOfDay, startOfMonth, endOfMonth } = require('date-fns')
+const Sugar = require('sugar')
 
 const getIncomeReport = async(req, res) => {
     try {
@@ -11,7 +12,7 @@ const getIncomeReport = async(req, res) => {
 
         //returning rate
         const totalCustomers = findCustomers.length
-        const returningCustomers = findCustomers.filter(customer => customer.orders.length > 0)
+        const returningCustomers = findCustomers.filter(customer => customer.orders.length > 1)
         const returningRate = Math.round((returningCustomers.length/totalCustomers)*100)
 
         //total income
@@ -144,21 +145,38 @@ const queryOrders = async(number, type, dateType) => {
 
 const getIncomeReportByFilter = async(req, res) => {
     try {
-        const { number, type, dateType } = req.body
-        let result = null
-        switch(type) {
-            case 'both':
-                result = await queryOrders(number, 'BOTH', dateType)
-                break;
-            case 'offline':
-                result = await queryOrders(number, 'OFFLINE', dateType)
-                break;
-            case 'online':
-                result = await queryOrders(number, 'DELIVERY', dateType)
-                break;
-            default:
-                result = orderModel.find()
+        const { number, type } = req.body
+
+        result1 = await queryOrders(number, 'BOTH', type)
+        result2 = await queryOrders(number, 'OFFLINE', type)
+        result3 = await queryOrders(number, 'DELIVERY', type)
+    
+        let labels = []
+
+        if(type === 'DAY') {
+            for (let i = 0; i < number; i++) {
+                var date = new Date();
+                date.setDate(date.getDate() - i);
+                const newdate = Sugar.Date.format(date, '{d} {Month}')
+                labels.push(newdate)
+            }
         }
+        if(type === 'MONTH') {
+            for (let i = 0; i < number; i++) {
+                var date = new Date();
+                date.setMonth(date.getMonth() - i);
+                const newdate = Sugar.Date.format(date, '{Month}')
+                labels.push(newdate)
+            }
+        }
+
+        const result = {
+            labels: labels.reverse(),
+            both: result1,
+            offline: result2,
+            online: result3
+        }
+        
         res.status(202).json({
             success: true,
             result
