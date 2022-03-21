@@ -25,3 +25,12 @@
     justify-content: space-around;
     justify-items: center;
 }
+
+.css-zow5z4-MuiGrid-root {
+    justify-content: space-around;
+}
+
+.product-item:hover {
+    border: 1px solid gray;
+    cursor: pointer;
+}

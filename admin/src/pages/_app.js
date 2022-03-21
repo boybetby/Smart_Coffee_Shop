@@ -8,6 +8,7 @@ import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
 import ReportContextProvider from '../contexts/reportContext';
 import './customStyle.css'
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -21,7 +22,7 @@ const App = (props) => {
       <CacheProvider value={emotionCache}>
         <Head>
           <title>
-            Material Kit Pro
+            Coffee Admin
           </title>
           <meta
             name="viewport"

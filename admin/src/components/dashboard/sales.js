@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import { ReportContext } from '../../contexts/reportContext';
 import { Bar } from 'react-chartjs-2';
 import { Box, Button, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Dropdown, FormControl, InputGroup, DropdownButton  } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner'

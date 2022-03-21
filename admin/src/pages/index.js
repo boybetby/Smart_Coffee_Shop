@@ -12,11 +12,10 @@ import { DashboardLayout } from '../components/dashboard-layout';
 import React, { useContext } from 'react'
 import { ReportContext } from '../contexts/reportContext';
 import Spinner from 'react-bootstrap/Spinner'
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const Dashboard = () =>{ 
   const {
-    reportState: { reportLoading, reportbyFilterLoading },
+    reportState: { reportLoading },
   } = useContext(ReportContext)
   
   let body = (
@@ -30,7 +29,7 @@ const Dashboard = () =>{
       <>
         <Head>
           <title>
-            Dashboard | Material Kit
+            Dashboard | Coffee Admin
           </title>
         </Head>
         <Box

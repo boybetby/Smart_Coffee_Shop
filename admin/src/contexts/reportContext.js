@@ -4,7 +4,11 @@ import axios from 'axios'
 import {
     apiUrl,
 	GET_INCOME_REPORT,
-    GET_INCOME_REPORT_BY_FILTER
+    GET_INCOME_REPORT_BY_FILTER,
+    GET_PRODUCTS_REPORT,
+    GET_ORDERS_REPORT,
+    GET_CUSTOMERS_REPORT,
+    SEARCH_PRODUCTS
 }from '../reducers/constants'
 
 export const ReportContext = createContext()
@@ -14,7 +18,14 @@ const ReportContextProvider = ({ children }) => {
 		incomeReport: null,
         reportLoading: true,
         incomeReportByFilter: [],
-        reportbyFilterLoading: true
+        reportbyFilterLoading: true,
+        productsReport: null,
+        searchProducts: null,
+        productsReportLoading: true,
+        ordersReport: null,
+        ordersReportLoading: true,
+        customersReport: null,
+        customersReportLoading: true
 	})
 
     const getIncomeReport = async() => {
@@ -27,11 +38,6 @@ const ReportContextProvider = ({ children }) => {
             console.log(error)
         }
     }
-
-    useEffect(() => {
-        getIncomeReport(),
-        getIncomeReportByFilter(7, 'DAY')
-    }, [])
 
     const getIncomeReportByFilter = async(number, type) => {
         reportState.reportbyFilterLoading = true
@@ -52,10 +58,66 @@ const ReportContextProvider = ({ children }) => {
         }
     }
 
+    const getProductsReport = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/products`)
+            if (response.data.success) {
+				dispatch({ type: GET_PRODUCTS_REPORT, payload: response.data.products })
+                dispatch({ type: SEARCH_PRODUCTS, payload: response.data.products })
+			}
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
+
+    const getOrdersReport = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/orders`)
+            if (response.data.success) {
+				dispatch({ type: GET_ORDERS_REPORT, payload: response.data.orders })
+			}
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
+
+    const getCustomersReport = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/customers`)
+            if (response.data.success) {
+				dispatch({ type: GET_CUSTOMERS_REPORT, payload: response.data.customers })
+			}
+        } catch (error) {
+            
+        }
+    }
+
+    const formatVietnamese = (string) => {
+        return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    }
+
+    const searchProducts = async(name) => {
+        const search = reportState.productsReport.filter(e => formatVietnamese(e.drinkName).toLowerCase().includes(formatVietnamese(name).toLowerCase()))
+        dispatch({ type: SEARCH_PRODUCTS, payload: search })
+    }
+
+    useEffect(() => {
+        getIncomeReport(),
+        getIncomeReportByFilter(7, 'DAY'),
+        getProductsReport(),
+        getOrdersReport(),
+        getCustomersReport()
+    }, [])
+
     const reportContextData = {
 		reportState,
         getIncomeReport,
-        getIncomeReportByFilter
+        getIncomeReportByFilter,
+        getOrdersReport,
+        getCustomersReport,
+        searchProducts
 	}
 
     return (

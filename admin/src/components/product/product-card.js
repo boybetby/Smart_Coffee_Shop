@@ -1,95 +1,109 @@
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
-import { Clock as ClockIcon } from '../../icons/clock';
-import { Download as DownloadIcon } from '../../icons/download';
+import { apiUrl } from 'src/reducers/constants';
+import ProductModal from 'src/components/product/ProductModal';
 
-export const ProductCard = ({ product, ...rest }) => (
-  <Card
-    sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%'
-    }}
-    {...rest}
-  >
-    <CardContent>
-      <Box
+export const ProductCard = ({ product, ...rest }) => {
+  const [modalShow, setModalShow] = useState(false);
+
+  const handleClick = (product) => {
+    setModalShow(true)
+  }
+
+  return (
+    <>
+      <ProductModal 
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        product={product}
+      />
+      <Card
+        onClick={() => handleClick(product)}
+        className='product-item'
         sx={{
           display: 'flex',
-          justifyContent: 'center',
-          pb: 3
+          flexDirection: 'column',
+          height: '100%'
         }}
+        {...rest}
       >
-        <Avatar
-          alt="Product"
-          src={product.media}
-          variant="square"
-        />
-      </Box>
-      <Typography
-        align="center"
-        color="textPrimary"
-        gutterBottom
-        variant="h5"
-      >
-        {product.title}
-      </Typography>
-      <Typography
-        align="center"
-        color="textPrimary"
-        variant="body1"
-      >
-        {product.description}
-      </Typography>
-    </CardContent>
-    <Box sx={{ flexGrow: 1 }} />
-    <Divider />
-    <Box sx={{ p: 2 }}>
-      <Grid
-        container
-        spacing={2}
-        sx={{ justifyContent: 'space-between' }}
-      >
-        <Grid
-          item
-          sx={{
-            alignItems: 'center',
-            display: 'flex'
-          }}
-        >
-          <ClockIcon color="action" />
-          <Typography
-            color="textSecondary"
-            display="inline"
-            sx={{ pl: 1 }}
-            variant="body2"
+        <CardContent>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              pb: 3
+            }}
           >
-            Updated 2hr ago
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          sx={{
-            alignItems: 'center',
-            display: 'flex'
-          }}
-        >
-          <DownloadIcon color="action" />
+            <Avatar
+              alt="Product"
+              src={`${apiUrl}${product.drinkImage}`}
+              variant="square"
+            />
+          </Box>
           <Typography
-            color="textSecondary"
-            display="inline"
-            sx={{ pl: 1 }}
-            variant="body2"
+            align="center"
+            color="textPrimary"
+            gutterBottom
+            variant="h5"
           >
-            {product.totalDownloads}
-            {' '}
-            Downloads
+            {product.drinkName}
           </Typography>
-        </Grid>
-      </Grid>
-    </Box>
-  </Card>
-);
+          <Typography
+            align="center"
+            color="textPrimary"
+            variant="body1"
+          >
+            {product.description}
+          </Typography>
+        </CardContent>
+        <Box sx={{ flexGrow: 1 }} />
+        <Divider />
+        <Box sx={{ p: 2 }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ justifyContent: 'space-between' }}
+          >
+            <Grid
+              item
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
+            >
+              <Typography
+                color="textSecondary"
+                display="inline"
+                sx={{ pl: 1 }}
+                variant="body2"
+              >
+                {String(product.defaultPrice[0]).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.')} VND
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              sx={{
+                alignItems: 'center',
+                display: 'flex'
+              }}
+            >
+              <Typography
+                color="textSecondary"
+                display="inline"
+                sx={{ pl: 1 }}
+                variant="body2"
+              >
+                {product.category}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </Card>
+    </>
+  )
+};
 
 ProductCard.propTypes = {
   product: PropTypes.object.isRequired

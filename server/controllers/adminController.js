@@ -1,5 +1,6 @@
 const orderModel = require('../models/order') 
 const customerModel = require('../models/customer')
+const drinkModel = require('../models/drink')
 const { startOfDay, endOfDay, startOfMonth, endOfMonth } = require('date-fns')
 const Sugar = require('sugar')
 
@@ -189,9 +190,57 @@ const getIncomeReportByFilter = async(req, res) => {
     }
 }
 
+const getProductsReport = async(req, res) => {
+    try {
+        const products = await drinkModel.find().sort({createAt:-1})
+        res.status(202).json({
+            success: true,
+            products
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
+const getOrdersReport = async(req, res) =>  {
+    try {
+        const orders = await orderModel.find().sort({createAt:-1})
+        res.status(202).json({
+            success: true,
+            orders
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
+const getCustomersReport = async(req, res) =>  {
+    try {
+        const customers = await customerModel.find()
+        res.status(202).json({
+            success: true,
+            customers
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
 const report = {
     getIncomeReport,
-    getIncomeReportByFilter
+    getIncomeReportByFilter,
+    getProductsReport,
+    getOrdersReport,
+    getCustomersReport
 }
 
 module.exports = report

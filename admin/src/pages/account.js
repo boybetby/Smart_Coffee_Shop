@@ -8,7 +8,7 @@ const Account = () => (
   <>
     <Head>
       <title>
-        Account | Material Kit
+        Account | Coffee Admin
       </title>
     </Head>
     <Box
