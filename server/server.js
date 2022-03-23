@@ -34,15 +34,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(cors())
 
+const handleRequest = (req, res, next) => {
+    console.log('received an api request')
+    next()
+}
+
 //@user
-app.use('/api/customer', customerRouter)
-app.use('/api/drink', drinkRouter)
-app.use('/api/order', orderRouter)
-app.use('/api/customer', customerRouter)
-app.use('/api/user', userRouter)
+app.use('/api/customer', handleRequest, customerRouter)
+app.use('/api/drink', handleRequest, drinkRouter)
+app.use('/api/order', handleRequest, orderRouter)
+app.use('/api/customer', handleRequest, customerRouter)
+app.use('/api/user', handleRequest, userRouter)
 
 //@admin
-app.use('/api/admin', adminRouter)
+app.use('/api/admin', handleRequest, adminRouter)
 app.use('/trainingdata', trainingStart)
 app.use('/tranningmachinelearning', main)
 
