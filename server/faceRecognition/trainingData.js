@@ -164,4 +164,35 @@ const faceRecognite = async (req, res) => {
     }
 }
 
-module.exports = { trainingStart, readTrainingData, faceRecognite } 
+const getData = async(req, res) => {
+    try {
+        fs.readFile('./faceRecognition/trainingData.json', async (err, data) => {
+            if (err) {
+                console.log(err);
+            }  
+    
+            let content = JSON.parse(data);
+            
+            // for (var x = 0; x < Object.keys(content).length; x++) {
+            //     for (var y = 0; y < Object.keys(content[x].descriptors).length; y++) {
+            //         var results = Object.values(content[x].descriptors[y]);
+            //         content[x].descriptors[y] = new Float32Array(results);
+            //     }
+            // }
+
+            // faceMatcher = await createFaceMatcher(content);
+            
+            res.status(202).json({
+                success: true,
+                content: content
+            })
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
+module.exports = { trainingStart, readTrainingData, faceRecognite, getData } 

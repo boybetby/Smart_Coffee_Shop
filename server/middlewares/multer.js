@@ -18,6 +18,20 @@ var storage = multer.diskStorage({
     }
 })
 
+var updateStorage = multer.diskStorage({
+    destination : function ( req , file , cb ){
+        const path = `./drinks/${req.body.category}`
+        fs.mkdirSync(path, { recursive: true })
+        cb(null, path)
+    },
+    filename : function (req, file , cb){
+        // image.jpg
+
+        cb(null, req.body.drinkName + ".png")
+    }
+})
+
+
 const imagesStorage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './storedImages')
@@ -47,6 +61,27 @@ var upload = multer ({
     }
 })
 
+
+var uploadUpdated = multer ({
+    storage: updateStorage,
+    fileFilter: function(req, file, callback) {
+        if(
+            file.mimetype == "image/png" ||
+            file.mimetype == "image/jpg" ||
+            file.mimetype == "image/jpeg" 
+        ){
+            callback(null, true)
+        } else {
+            console.log("only jpg & png file supported!")
+            callback(null, false)
+        }
+    },
+    limits: {
+        fileSize: 1920 * 1920 * 2
+    }
+})
+
+
 var uploadStoredImages = multer ({
     storage: imagesStorage,
     fileFilter: function(req, file, callback) {
@@ -68,4 +103,4 @@ var uploadStoredImages = multer ({
 
 const getFile = multer()
 
-module.exports = {upload, getFile, uploadStoredImages}
+module.exports = {upload, getFile, uploadStoredImages, uploadUpdated}

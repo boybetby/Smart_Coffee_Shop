@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
-import { products } from 'src/__mocks__/products'
+import { useContext } from 'react';
+import { ReportContext } from '../../contexts/reportContext';
 
 const ProductModal = (props) => {
+    const {
+        updateProduct
+    } = useContext(ReportContext)
+
     const [ category, setCategory ] = useState(props.product.category)
     const [ updateDisabled, setUpdateDisabled ] = useState(true)
     const [ updatedProduct, setUpdatedProduct ] = useState(props.product)
@@ -27,6 +32,10 @@ const ProductModal = (props) => {
         }
     }
 
+    const handleUpdate = async() => {
+        await updateProduct(updatedProduct)
+    }
+
     return (
         <>
             <Modal
@@ -34,10 +43,11 @@ const ProductModal = (props) => {
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            onShow={() => setUpdateDisabled(true)}
             >
                 <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Modal heading
+                    Product's detail
                 </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -67,11 +77,11 @@ const ProductModal = (props) => {
                                 <option value="FREEZE">FREEZE</option>
                             </Form.Select>
                         </Form.Group>
-                        <Form.Group style={{margin: '15px 0'}}>
+                        {/* <Form.Group style={{margin: '15px 0'}}>
                             <Form.Label>Product Image</Form.Label>
                             <Form.Control type="file"  disabled={updateDisabled} name='drinkImage'/>
-                        </Form.Group>
-                        <Button variant="primary" type="submit" disabled={updateDisabled} >
+                        </Form.Group> */}
+                        <Button variant="primary" disabled={updateDisabled} onClick={handleUpdate} style={{margin: '15px 0'}}>
                             Update
                         </Button>
                     </Form>

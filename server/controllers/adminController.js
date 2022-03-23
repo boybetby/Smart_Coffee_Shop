@@ -235,12 +235,35 @@ const getCustomersReport = async(req, res) =>  {
     }
 }
 
+const updateProduct = async(req, res) => {
+    try {
+        const {updatedProduct} = req.body
+
+        const drink = await drinkModel.findOneAndUpdate(
+            { _id: updatedProduct._id },
+            updatedProduct,
+            { new: true }
+        );
+
+        res.status(202).json({
+            success: true,
+            drink
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
 const report = {
     getIncomeReport,
     getIncomeReportByFilter,
     getProductsReport,
     getOrdersReport,
-    getCustomersReport
+    getCustomersReport,
+    updateProduct
 }
 
 module.exports = report

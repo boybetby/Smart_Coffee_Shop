@@ -34,6 +34,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(cors())
 
+//@user
 app.use('/api/customer', customerRouter)
 app.use('/api/drink', drinkRouter)
 app.use('/api/order', orderRouter)

@@ -21,7 +21,7 @@ const Information = () => {
         )
     } else {
         if(customer){
-            if(!customer.existedCustomer){
+            if(!customer.success){
                 informationBody = (
                     <div>
                         <p>This is new customer</p>
@@ -30,7 +30,7 @@ const Information = () => {
                 )
             }
             else {
-                if(customer.detectedCustomer.customerName === 'unknown') {
+                if(customer.customer.customerName === 'unknown') {
                     informationBody = (
                         <div>
                             <p>This customer has no account</p>
@@ -42,7 +42,7 @@ const Information = () => {
                     if(customerOrder.length !== 0){
                         informationBody = (
                             <div>
-                                <p><b>{customer.detectedCustomer.customerName}</b></p>
+                                <p><b>{customer.customer.customerName}</b></p>
                                 {customerOrder.map(order => (
                                     <p key={order._id}>{order.drinkName}: {order.quantity}</p>
                                 ))}
@@ -52,7 +52,7 @@ const Information = () => {
                     else {
                         informationBody = (
                             <div>
-                                <p>{customer.detectedCustomer.customerName}</p>
+                                <p>{customer.customer.customerName}</p>
                                 <p>This customer has no order</p>
                             </div>
                         )

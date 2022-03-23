@@ -12,7 +12,7 @@ const MenuList = () => {
 
 	useEffect(() => {
     getMenu()
-  })
+  }, [])
   
   let menuBody = null
   if(menu){

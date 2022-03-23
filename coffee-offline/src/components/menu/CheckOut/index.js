@@ -32,10 +32,11 @@ const CheckOut = () => {
             alert('No customer!')
         }
         const input = {
-            id: customer.detectedCustomer._id,
+            id: customer.customer._id,
             order: order,
             totalPrice: calculateTotal()
         }
+
         const reponse = await makeOrder(input)
         if(reponse.success) {
             swal({

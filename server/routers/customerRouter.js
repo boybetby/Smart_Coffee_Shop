@@ -1,12 +1,14 @@
 const express = require("express")
-const { getCustomers, getOrder, getAllOrders, authCustomer, registerCustomer,loginCustomer, updateCustomer } = require('../controllers/customersController')
-const { faceRecognite } = require('../faceRecognition/trainingData')
+const { getCustomers, findCustomer, getOrder, getAllOrders, authCustomer, registerCustomer,loginCustomer, updateCustomer } = require('../controllers/customersController')
+const { faceRecognite, getData } = require('../faceRecognition/trainingData')
 const {verifyToken, verify} = require('../middlewares/auth')
 const { getProductRecommendation } = require('../productRecommendation/ML')
 
 const router = express.Router();
 
 router.get('/', getCustomers);
+
+router.get('/findcustomer/:id', findCustomer);
 
 router.get('/auth', verify, authCustomer)
 
@@ -24,5 +26,7 @@ router.post('/getProductRecommentdation', getProductRecommendation)
 
 //nhan dien khuon mat
 router.post('/detect' , verifyToken, faceRecognite)
+
+router.get('/getFaceData' , verifyToken, getData)
 
 module.exports = router

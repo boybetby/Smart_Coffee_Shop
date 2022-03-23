@@ -18,7 +18,7 @@ export const DashboardNavbar = (props) => {
   return (
     <>
       <DashboardNavbarRoot
-        style={{'z-index': '0'}}
+        style={{zIndex: '0'}}
         sx={{
           left: {
             lg: 280

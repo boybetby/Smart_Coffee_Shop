@@ -103,6 +103,21 @@ const ReportContextProvider = ({ children }) => {
         dispatch({ type: SEARCH_PRODUCTS, payload: search })
     }
 
+    const updateProduct = async(updatedProduct) => {
+        try {
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/admin/updateProduct`,
+                data: {
+                    updatedProduct
+                }
+            });
+            if(response.data.success) getProductsReport()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         getIncomeReport(),
         getIncomeReportByFilter(7, 'DAY'),
@@ -117,7 +132,8 @@ const ReportContextProvider = ({ children }) => {
         getIncomeReportByFilter,
         getOrdersReport,
         getCustomersReport,
-        searchProducts
+        searchProducts,
+        updateProduct
 	}
 
     return (

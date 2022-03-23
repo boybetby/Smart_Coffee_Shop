@@ -14,6 +14,25 @@ const getCustomers = async (req, res) => {
   }
 };
 
+const findCustomer = async(req, res) => {
+  try {
+    const id = req.params.id
+    const customer = await customerModel.findById(id);
+    if(!customer) {
+      res.status(200).json({
+        success: false,
+        message: 'Customer not found!'
+      })
+    }
+    res.status(202).json({
+      success: true,
+      customer
+    })
+  } catch (error) {
+    
+  }
+}
+
 const getOrder = async(req, res) => {
   try {
     const orders = await orderModel.find({
@@ -138,6 +157,12 @@ const loginCustomer = async (req, res) => {
 }
 
 const registerCustomer = async (req, res) => {
+  if(!req.body.registerInfo){
+    return res.status(404).json({ 
+      success: false, 
+      message: 'Wrong format' 
+    })
+  }
   const { username, password, customerName } = req.body.registerInfo
   if (!username || !password)
 		return res.status(200).json({ 
@@ -273,4 +298,4 @@ const updateCustomer = async (req, res) => {
     }
 }
 
-module.exports = { getCustomers, getOrder, getAllOrders, authCustomer, registerCustomer, loginCustomer, updateCustomer }
+module.exports = { getCustomers, findCustomer, getOrder, getAllOrders, authCustomer, registerCustomer, loginCustomer, updateCustomer }

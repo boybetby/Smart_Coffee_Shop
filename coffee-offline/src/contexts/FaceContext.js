@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState } from 'react'
+import React, { createContext, useReducer, useState, useEffect } from 'react'
 import faceReducer from '../reducers/faceReducer'
 import axios from 'axios'
 import moment from 'moment';
@@ -7,6 +7,7 @@ import {
     token,
 	DETECT_FACE,
     DETECT_FACE_FAIL,
+    GET_FACEDATA,
     DETECTING,
     GET_CUSTOMER_ORDER,
     GET_CUSTOMER_RECOMMENDATION,
@@ -20,35 +21,75 @@ const FaceContextProvider = ({ children }) => {
 		customer: null,
         customerOrder: [],
         customerRecommendation: null,
-        isDetecting: false
+        isDetecting: false,
+        faceData: null
 	})
 
     const [showRegisterModal, setShowRegisterModal] = useState(false)
 
-    const detectFace = async(base64) => {
-        clearRecommendation()
-        dispatch({ type: DETECTING, payload: true })
-        const today = moment(Date().toLocaleString()).format("DDMMYYYYHHmm");
+    // const detectFace = async(base64) => {
+    //     clearRecommendation()
+    //     dispatch({ type: DETECTING, payload: true })
+    //     const today = moment(Date().toLocaleString()).format("DDMMYYYYHHmm");
+    //     try {
+    //         const response = await axios({
+    //             method: 'post',
+    //             url:  `${apiUrl}/api/customer/detect`,
+    //             headers: {
+    //                 Authorization: token
+    //             },
+    //             data: {
+    //               base64: base64,
+    //               name: today
+    //             }
+    //         });
+    //         if (response.data.success) {
+    //             dispatch({ type: DETECT_FACE, payload: response.data })
+    //             dispatch({ type: DETECTING, payload: false })
+    //             getCustomersOrder(response.data.detectedCustomer.orders)
+    //             getCustomersRecommendation(response.data.detectedCustomer._id)
+    //         }
+    //         else {
+    //             dispatch({ type: DETECT_FACE_FAIL })
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+
+    const getFaceData = async() => {
         try {
             const response = await axios({
-                method: 'post',
-                url:  `${apiUrl}/api/customer/detect`,
+                method: 'get',
+                url:  `${apiUrl}/api/customer/getfacedata`,
                 headers: {
                     Authorization: token
-                },
-                data: {
-                  base64: base64,
-                  name: today
                 }
             });
-            if (response.data.success) {
-                dispatch({ type: DETECT_FACE, payload: response.data })
-                dispatch({ type: DETECTING, payload: false })
-                getCustomersOrder(response.data.detectedCustomer.orders)
-                getCustomersRecommendation(response.data.detectedCustomer._id)
+            if(response.data.success) {
+                dispatch({ type: GET_FACEDATA, payload: response.data.content })
             }
-            else {
-                dispatch({ type: DETECT_FACE_FAIL })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getFaceData()
+    }, [])
+
+    const getCustomerInfo = async(id) => {
+        clearCustomerState()
+        try {
+            const response = await axios({
+                method: 'get',
+                url:  `${apiUrl}/api/customer/findcustomer/${id}`
+            });
+            if(response.data.success) {
+                dispatch({ type: DETECT_FACE, payload: response.data })
+                getCustomersOrder(response.data.customer.orders)
+                getCustomersRecommendation(response.data.customer._id)
+                dispatch({ type: DETECTING, payload: false })
             }
         } catch (error) {
             console.error(error);
@@ -88,7 +129,8 @@ const FaceContextProvider = ({ children }) => {
         }
     }
 
-    const clearRecommendation = () => {
+    const clearCustomerState = () => {
+        dispatch({ type: DETECTING, payload: true })
 		dispatch({ type: CLEAR_CUSTOMER_RECOMMENDATION })
 	}
 
@@ -114,11 +156,14 @@ const FaceContextProvider = ({ children }) => {
 
     const faceContextData = {
         faceState,
-        detectFace,
+        // detectFace,
         RegisterCustomer,
         showRegisterModal,
         setShowRegisterModal,
-        getCustomersOrder
+        getCustomersOrder,
+        getCustomerInfo,
+        clearCustomerState,
+        getCustomersRecommendation
     }
 
     return (

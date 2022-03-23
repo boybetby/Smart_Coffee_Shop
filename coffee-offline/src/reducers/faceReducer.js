@@ -1,6 +1,7 @@
 import {
 	DETECT_FACE,
     DETECT_FACE_FAIL,
+    GET_FACEDATA,
     DETECTING,
     GET_CUSTOMER_ORDER,
     GET_CUSTOMER_RECOMMENDATION,
@@ -8,7 +9,7 @@ import {
 } from './constants'
 
 
-const menuReducer = (state, action) => {
+const faceReducer = (state, action) => {
     const { type, payload } = action;
     switch (type) {
         case DETECT_FACE: 
@@ -20,6 +21,11 @@ const menuReducer = (state, action) => {
             return {
                 ...state,
                 customer: 'Can not detect this customer'
+            }
+        case GET_FACEDATA:
+            return {
+                ...state,
+                faceData: payload
             }
         case DETECTING:
             return {
@@ -46,4 +52,4 @@ const menuReducer = (state, action) => {
     }
 }
 
-export default menuReducer
+export default faceReducer
