@@ -1,11 +1,9 @@
-import React, { useContext, useLayoutEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Webcam from "react-webcam";
 import { Button } from 'react-bootstrap'
 import { FaceContext } from '../../../contexts/FaceContext'
 import './style.css'
 import * as faceapi from 'face-api.js';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Camera = () => {
     const {
@@ -13,6 +11,8 @@ const Camera = () => {
         getCustomerInfo,
         clearCustomerState
     } = useContext(FaceContext)
+
+    const [ subFaceMatcher, setSubFaceMatcher ] = useState()
 
     let faceMatcher
 
@@ -32,9 +32,10 @@ const Camera = () => {
             }
         }
         faceMatcher = await createFaceMatcher(content)
+        setSubFaceMatcher(faceMatcher)
     }
 
-    init()
+    useEffect(() => init(),[])
 
     async function createFaceMatcher(data) {
         const labeledFaceDescriptors = await Promise.all(data.map(className => {
@@ -49,7 +50,7 @@ const Camera = () => {
     
     const handleFileChange = async (e) => {
         const detection = await faceapi.detectSingleFace(e).withFaceLandmarks().withFaceDescriptor()
-        const face = faceMatcher.findBestMatch(detection.descriptor)
+        const face = subFaceMatcher.findBestMatch(detection.descriptor)
         return face
     }
     
@@ -64,14 +65,6 @@ const Camera = () => {
 
     return (
         <div className='camera'>
-            <ToastContainer
-                position="top-right"
-                autoClose={1000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-            />
             <input type="file" id="file-input" style={{display: "none"}} onChange={(e) => handleFileChange(e)}></input>
             <Webcam className={'webcam'}
                 audio={false}
@@ -81,7 +74,7 @@ const Camera = () => {
                 screenshotFormat="image/jpeg"
                 forceScreenshotSourceSize="true"
             />
-            <Button variant="primary" className='btn_camera' onClick={handleClick}>DETECT</Button>
+            <Button variant="primary" className='btn_camera' onClick={handleClick} >DETECT</Button>
         </div>
     )
 }

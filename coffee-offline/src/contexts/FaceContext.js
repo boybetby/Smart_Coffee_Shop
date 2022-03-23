@@ -1,7 +1,6 @@
 import React, { createContext, useReducer, useState, useEffect } from 'react'
 import faceReducer from '../reducers/faceReducer'
 import axios from 'axios'
-import moment from 'moment';
 import {
     apiUrl,
     token,
