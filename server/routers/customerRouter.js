@@ -1,5 +1,14 @@
 const express = require("express")
-const { getCustomers, findCustomer, getOrder, getAllOrders, authCustomer, registerCustomer,loginCustomer, updateCustomer } = require('../controllers/customersController')
+const { getCustomers, 
+    findCustomer, 
+    getOrder, 
+    getAllOrders, 
+    authCustomer, 
+    registerCustomer, 
+    loginCustomer, 
+    updateCustomer,
+    createNewCustomer
+}  = require('../controllers/customersController')
 const { faceRecognite, getData } = require('../faceRecognition/trainingData')
 const {verifyToken, verify} = require('../middlewares/auth')
 const { getProductRecommendation } = require('../productRecommendation/ML')
@@ -11,6 +20,8 @@ router.get('/', getCustomers);
 router.get('/findcustomer/:id', findCustomer);
 
 router.get('/auth', verify, authCustomer)
+
+router.post('/createnewcustomer', createNewCustomer);
 
 router.post('/register', registerCustomer);
 

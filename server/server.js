@@ -48,8 +48,8 @@ app.use('/api/user', handleRequest, userRouter)
 
 //@admin
 app.use('/api/admin', handleRequest, adminRouter)
-app.use('/trainingdata', trainingStart)
-app.use('/tranningmachinelearning', main)
+app.use('/trainingFaceRecognition', trainingStart)
+app.use('/trainingProductRecommendation', main)
 
 app.use('/drinks', express.static('drinks'));
 

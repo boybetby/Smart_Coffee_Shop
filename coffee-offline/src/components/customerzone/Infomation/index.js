@@ -13,15 +13,17 @@ const Information = () => {
         <p>No information detected</p>
     )
 
+    console.log(customer)
+
     if(isDetecting) {
         informationBody = (
-            <div className='spinner-container'>
+            <div className=''>
 				<Spinner animation='border' variant='info' />
 			</div>
         )
     } else {
         if(customer){
-            if(!customer.success){
+            if(customer.newCustomer){
                 informationBody = (
                     <div>
                         <p>This is new customer</p>

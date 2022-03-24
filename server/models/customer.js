@@ -10,9 +10,9 @@ const CustomerSchema = new Schema({
         type: String,
         default: 'unknown'
     },
-    customerImages: [{
+    customerImages: {
         type: String
-    }],
+    },
     username: {
         type: String
     }, 

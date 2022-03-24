@@ -293,7 +293,7 @@ const findRecommedation = (customerOrder, customerMatrixJSON) => {
     return productsScore.slice(0,3)
 }
 
-//@API FOR FONT-END
+//@API FOR FRONT-END
 const getProductRecommendation = async(req, res) => {
     try {
         const _id = req.body.id
@@ -306,40 +306,60 @@ const getProductRecommendation = async(req, res) => {
         })
 
         const customerOrder = await getCustomerOrder(orders, customer)
-
-        const count = customerOrder.orders.filter(product => product.quantity > 0)
-
-        if(count.lenght < 2) {
+        if(!customerOrder) {
             const products = await drinkModel.find().sort({createAt:-1}).limit(3)
             res.status(202).json({
                 success: true,
                 products,
                 message: 'You need to buy more to get recommended'
-            })   
+            })
         }
-    
-        const rawdata = await fs.readFileSync('./productRecommendation/data.json');
-        
-        const matrixJSON = JSON.parse(rawdata);
-        const customerMatrixJSON = matrixJSON.find(e => e._id === _id)
+        else {
+            const count = customerOrder.orders.filter(product => product.quantity > 0)
 
-        const topRecommendation = await findRecommedation(customerOrder, customerMatrixJSON)
-
-        const idList = []
-        await topRecommendation.map(e => {
-            idList.push(e._id)
-        })
-
-        const result = await drinkModel.find({
-            '_id': {
-              $in: idList
+            if(count.lenght < 2) {
+                const products = await drinkModel.find().sort({createAt:-1}).limit(3)
+                res.status(202).json({
+                    success: true,
+                    products,
+                    message: 'You need to buy more to get recommended'
+                })   
             }
-        })
-
-        res.status(202).json({
-            success: true,
-            result
-        })       
+            else {
+                const rawdata = await fs.readFileSync('./productRecommendation/data.json');
+            
+                const matrixJSON = JSON.parse(rawdata);
+                const customerMatrixJSON = matrixJSON.find(e => e._id === _id)
+                
+                if(!customerMatrixJSON) {
+                    const products = await drinkModel.find().sort({createAt:-1}).limit(3)
+                    res.status(202).json({
+                        success: true,
+                        products,
+                        message: 'You need to buy more to get recommended'
+                    })   
+                }
+                else {
+                    const topRecommendation = await findRecommedation(customerOrder, customerMatrixJSON)
+        
+                    const idList = []
+                    await topRecommendation.map(e => {
+                        idList.push(e._id)
+                    })
+            
+                    const result = await drinkModel.find({
+                        '_id': {
+                          $in: idList
+                        }
+                    })
+            
+                    res.status(202).json({
+                        success: true,
+                        result
+                    })      
+                }
+            }
+        }
     } catch (error) {
         res.status(500).json({
             success: false,

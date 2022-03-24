@@ -3,7 +3,10 @@ require('dotenv').config()
 const  customerModel = require('../models/customer') 
 const orderModel = require('../models/order')
 const argon2 = require('argon2')
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
+const moment = require('moment')
+const fs = require('fs');
+const path = require('path');
 
 const getCustomers = async (req, res) => {
   try {
@@ -13,6 +16,40 @@ const getCustomers = async (req, res) => {
     res.status(500).json({ error: err });
   }
 };
+
+const renderFileAddress = (id,name) => {
+  return `../uploads/${id}/${name}.jpeg`
+}
+
+const createNewCustomer = async(req, res) => {
+  try {
+    const newCustomer = new customerModel()
+    newCustomer.customerImages = `/uploads/${newCustomer._id}/`
+
+    fs.mkdirSync(`./uploads/${newCustomer._id}/`);
+    const today = moment(new Date()).format("DDMMYYYYHHmm");
+    const base64 = req.body.base64.replace(/^data:image\/jpeg;base64,/, "");
+    try{
+      fs.writeFileSync( path.join(__dirname, renderFileAddress(newCustomer._id, today)), base64, 'base64', function(err) {
+        if(err) console.log(err)
+      });
+    }catch(error) {
+      console.log(error)
+    }
+
+
+    await newCustomer.save()
+    res.status(202).json({
+      success: true,
+      newCustomer
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    })
+  }
+}
 
 const findCustomer = async(req, res) => {
   try {
@@ -24,12 +61,17 @@ const findCustomer = async(req, res) => {
         message: 'Customer not found!'
       })
     }
-    res.status(202).json({
-      success: true,
-      customer
-    })
+    else {
+      res.status(202).json({
+        success: true,
+        customer
+      })
+    }
   } catch (error) {
-    
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    })
   }
 }
 
@@ -258,11 +300,11 @@ const updateCustomer = async (req, res) => {
             orders: findCustomer.orders,
             coupons: findCustomer.coupons,
             isCreated: true,
-            passwordChanged: true
+            passwordChanged: false
           },
           { new: true }
         );
-        await customerModel.findOneAndRemove(findCustomer)
+        await customerModel.findOneAndDelete({'_id': findCustomer._id})
         res.status(202).json({
           success: true,
           message: 'Customer updated',
@@ -286,16 +328,19 @@ const updateCustomer = async (req, res) => {
           customer
         })
       }
-      
-      res.status(202).json({
-        success: true,
-        message: 'Customer updated',
-        customer
-      })
     } catch (error) {
       console.log(error)
       res.status(500).json({ success: false, message: 'Internal server error' })
     }
 }
 
-module.exports = { getCustomers, findCustomer, getOrder, getAllOrders, authCustomer, registerCustomer, loginCustomer, updateCustomer }
+module.exports = { getCustomers, 
+  findCustomer, 
+  getOrder, 
+  getAllOrders, 
+  authCustomer, 
+  registerCustomer, 
+  loginCustomer, 
+  updateCustomer,
+  createNewCustomer 
+}

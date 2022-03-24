@@ -89,9 +89,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 <TableCell>
                   Total orders
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   Face Detected
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   Registration date
                 </TableCell>
@@ -132,9 +132,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   <TableCell>
                     {(customer.orders.length)}
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {(customer.customerImages.length>0) ? 'True' : 'False' }
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     {moment(customer.createAt).format('MMMM DD YYYY')}
                   </TableCell>

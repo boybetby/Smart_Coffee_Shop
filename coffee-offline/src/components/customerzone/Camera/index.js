@@ -9,7 +9,8 @@ const Camera = () => {
     const {
         faceState: { faceData },
         getCustomerInfo,
-        clearCustomerState
+        clearCustomerState,
+        newFaceDetected
     } = useContext(FaceContext)
 
     const [ subFaceMatcher, setSubFaceMatcher ] = useState()
@@ -60,12 +61,15 @@ const Camera = () => {
         var image = new Image();
         image.src = imageSrc
         const face = await handleFileChange(image)
-        await getCustomerInfo(face._label)
+        console.log(face._label)
+        if(face._label === 'unknown') {
+            await newFaceDetected(imageSrc)
+        }
+        else await getCustomerInfo(face._label)
     }
 
     return (
         <div className='camera'>
-            <input type="file" id="file-input" style={{display: "none"}} onChange={(e) => handleFileChange(e)}></input>
             <Webcam className={'webcam'}
                 audio={false}
                 width={130}

@@ -27,7 +27,7 @@ const RegisterButton = () => {
     
     const onSubmit = async event => {
         event.preventDefault()
-		const response = await RegisterCustomer(customer.detectedCustomer._id, newCustomer)
+		const response = await RegisterCustomer(customer.newCustomer._id, newCustomer)
 		resetAddPostData()
 	}
 

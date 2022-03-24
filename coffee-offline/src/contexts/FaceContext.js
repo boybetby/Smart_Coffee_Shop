@@ -73,6 +73,25 @@ const FaceContextProvider = ({ children }) => {
         }
     }
 
+    //register a new customer when new face detected
+    const newFaceDetected = async(base64) => {
+        try {
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/customer/createnewcustomer`,
+                data: {
+                    base64: base64
+                }
+            });
+            if(response.data.success) {
+                dispatch({ type: DETECT_FACE, payload: response.data })
+                dispatch({ type: DETECTING, payload: false })
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         getFaceData()
     }, [])
@@ -162,7 +181,8 @@ const FaceContextProvider = ({ children }) => {
         getCustomersOrder,
         getCustomerInfo,
         clearCustomerState,
-        getCustomersRecommendation
+        getCustomersRecommendation,
+        newFaceDetected
     }
 
     return (
