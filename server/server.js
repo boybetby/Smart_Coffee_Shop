@@ -43,7 +43,6 @@ const handleRequest = (req, res, next) => {
 app.use('/api/customer', handleRequest, customerRouter)
 app.use('/api/drink', handleRequest, drinkRouter)
 app.use('/api/order', handleRequest, orderRouter)
-app.use('/api/customer', handleRequest, customerRouter)
 app.use('/api/user', handleRequest, userRouter)
 
 //@admin
