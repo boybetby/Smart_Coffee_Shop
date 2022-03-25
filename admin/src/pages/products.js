@@ -3,14 +3,23 @@ import { Box, Container, Grid, Pagination } from '@mui/material';
 import { ProductListToolbar } from '../components/product/product-list-toolbar';
 import { ProductCard } from '../components/product/product-card';
 import { DashboardLayout } from '../components/dashboard-layout';
-import { useContext } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { ReportContext } from '../contexts/reportContext';
 import { Spinner } from 'react-bootstrap'
+import ProductModal from 'src/components/product/ProductModal';
 
 const Products = () => {
   const {
     reportState: { searchProducts, productsReportLoading },
   } = useContext(ReportContext)
+
+  const [modalShow, setModalShow] = useState(false);
+  const [updatedProduct, setUpdatedProduct] = useState();
+
+  const handleClick = useCallback((product) => {
+    setUpdatedProduct(product)
+    setModalShow(true)
+  }, [updatedProduct])
 
   let body = (
     <div className='traffic-spinner'>
@@ -25,6 +34,12 @@ const Products = () => {
             Products | Coffee Admin
           </title>
         </Head>
+
+        {updatedProduct ? (<ProductModal 
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          product={updatedProduct}
+        />) : (<div></div>)}
         <Box
           component="main"
           sx={{
@@ -45,7 +60,7 @@ const Products = () => {
                     key={product._id}
                     width='280px'
                   >
-                    <ProductCard product={product} />
+                    <ProductCard product={product} handleClick={handleClick}/>
                   </Grid>
                 ))}
               </Grid>

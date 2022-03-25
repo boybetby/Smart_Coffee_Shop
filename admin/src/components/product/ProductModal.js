@@ -39,11 +39,11 @@ const ProductModal = (props) => {
     return (
         <>
             <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            onShow={() => setUpdateDisabled(true)}
+                {...props}
+                size="md"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                onShow={() => setUpdateDisabled(true)}
             >
                 <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">

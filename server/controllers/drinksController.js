@@ -57,7 +57,7 @@ const createDrink = async (req, res) => {
       description: req.body.description,
       category: req.body.category
     })
-    
+
     if(req.files){
       newDrink.drinkImage = `/drinks/${req.body.category}/${req.body.drinkName}.png`
     }

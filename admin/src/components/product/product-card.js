@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { apiUrl } from 'src/reducers/constants';
-import ProductModal from 'src/components/product/ProductModal';
 
-export const ProductCard = ({ product, ...rest }) => {
-  const [modalShow, setModalShow] = useState(false);
-
-  const handleClick = (product) => {
-    setModalShow(true)
+export const ProductCard = ({ product, handleClick, ...rest }) => {
+  
+  const handleProductClick = (product) => {
+    handleClick(product)
   }
-
+  
   return (
     <>
-      <ProductModal 
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        product={product}
-      />
       <Card
-        onClick={() => handleClick(product)}
+        onClick={() => handleProductClick(product)}
         className='product-item'
         sx={{
           display: 'flex',

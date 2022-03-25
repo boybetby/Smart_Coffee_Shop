@@ -6,7 +6,6 @@ const slug = require('slug');
 // set storage
 var storage = multer.diskStorage({
     destination : function ( req , file , cb ){
-        const drinkName = req.body.drinkName
         const path = `./drinks/${req.body.category}`
         fs.mkdirSync(path, { recursive: true })
         cb(null, path)

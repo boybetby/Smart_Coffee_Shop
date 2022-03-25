@@ -103,6 +103,25 @@ const ReportContextProvider = ({ children }) => {
         dispatch({ type: SEARCH_PRODUCTS, payload: search })
     }
 
+    const createProduct = async(newProduct) => {
+        try {
+            var formData = new FormData();
+            formData.append("defaultPrice", newProduct.defaultPrice);
+            formData.append("description", newProduct.description);
+            formData.append("category", newProduct.category);
+            formData.append("drinkName", newProduct.drinkName);
+            formData.append("drinkImage", newProduct.drinkImage);
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/drink/`,
+                data: formData
+            });
+            if(response.data.success) getProductsReport()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const updateProduct = async(updatedProduct) => {
         try {
             const response = await axios({
@@ -133,7 +152,8 @@ const ReportContextProvider = ({ children }) => {
         getOrdersReport,
         getCustomersReport,
         searchProducts,
-        updateProduct
+        updateProduct,
+        createProduct
 	}
 
     return (

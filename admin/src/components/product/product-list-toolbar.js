@@ -8,23 +8,32 @@ import {
   SvgIcon,
   Typography
 } from '@mui/material';
-import { Download as DownloadIcon } from '../../icons/download';
 import { Search as SearchIcon } from '../../icons/search';
-import { Upload as UploadIcon } from '../../icons/upload';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ReportContext } from '../../contexts/reportContext';
+import CreateProductModal from './CreateProductModal'
 
 export const ProductListToolbar = (props) => {
   const {
     searchProducts
   } = useContext(ReportContext)
 
+  const [ modalShow, setModalShow ] = useState(false)
+
   const handleChange  = (e) => {
     searchProducts(e.target.value)
   }
 
+  const handleClick = () => {
+    setModalShow(true)
+  }
+
   return (
     <Box {...props}>
+      <CreateProductModal 
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
       <Box
         sx={{
           alignItems: 'center',
@@ -43,6 +52,7 @@ export const ProductListToolbar = (props) => {
           <Button
             color="primary"
             variant="contained"
+            onClick={handleClick}
           >
             Add products
           </Button>
