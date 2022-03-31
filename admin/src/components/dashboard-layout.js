@@ -3,6 +3,9 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { DashboardNavbar } from './dashboard-navbar';
 import { DashboardSidebar } from './dashboard-sidebar';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/authContext';
+import Login from 'src/pages/login';
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -15,8 +18,16 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
 }));
 
 export const DashboardLayout = (props) => {
-  const { children } = props;
+  let { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+
+  const {
+    authState: { isAuthenticated }
+  } = useContext(AuthContext)
+
+  if(!isAuthenticated) {
+    children = (<Login />)
+  }
 
   return (
     <>

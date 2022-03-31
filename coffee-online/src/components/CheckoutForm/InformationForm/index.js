@@ -41,7 +41,7 @@ const Information = () => {
       method: 'post',
       url:  `${apiUrl}/api/order/orderonline`,
       data: {
-        phoneNumber: order.phoneNumber,
+        username: order.phoneNumber,
         customerName: order.fullName,
         drinks: order.products,
         totalPrice: order.totalprice,

@@ -346,17 +346,27 @@ const getProductRecommendation = async(req, res) => {
                     await topRecommendation.map(e => {
                         idList.push(e._id)
                     })
+
+                    if(idList.length === 0) {
+                        const result = await drinkModel.find().sort({createAt:-1}).limit(3)
+                        res.status(202).json({
+                            success: true,
+                            result
+                        }) 
+                    }
+                    else {
+                        const result = await drinkModel.find({
+                            '_id': {
+                              $in: idList
+                            }
+                        })
+                
+                        res.status(202).json({
+                            success: true,
+                            result
+                        })      
+                    }
             
-                    const result = await drinkModel.find({
-                        '_id': {
-                          $in: idList
-                        }
-                    })
-            
-                    res.status(202).json({
-                        success: true,
-                        result
-                    })      
                 }
             }
         }

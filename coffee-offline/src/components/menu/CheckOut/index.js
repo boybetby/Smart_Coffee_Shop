@@ -27,16 +27,27 @@ const CheckOut = () => {
         return total
     }
 
+    console.log(customer)
+
     const handleOrder = async() => {
         if(!customer) {
             alert('No customer!')
         }
-        const input = {
-            id: customer.customer._id,
-            order: order,
-            totalPrice: calculateTotal()
+        let input
+        if(customer.newCustomer) {
+            input = {
+                id: customer.newCustomer._id,
+                order: order,
+                totalPrice: calculateTotal()
+            }
         }
-
+        else {
+            input = {
+                id: customer.customer._id,
+                order: order,
+                totalPrice: calculateTotal()
+            }
+        }
         const reponse = await makeOrder(input)
         if(reponse.success) {
             swal({

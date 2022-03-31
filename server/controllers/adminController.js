@@ -222,7 +222,7 @@ const getOrdersReport = async(req, res) =>  {
 
 const getCustomersReport = async(req, res) =>  {
     try {
-        const customers = await customerModel.find()
+        const customers = await customerModel.find().sort({createAt:-1})
         res.status(202).json({
             success: true,
             customers

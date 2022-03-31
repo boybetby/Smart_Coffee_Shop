@@ -40,8 +40,8 @@ const Recommendation = () => {
 
     
     let recommendationBody = (
-        <div className='shelf-container'>
-            You have not logged in yet!
+        <div className='' style={{textAlign: 'center'}}>
+           
         </div>
     )
 

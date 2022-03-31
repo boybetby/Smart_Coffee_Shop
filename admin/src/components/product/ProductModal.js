@@ -32,7 +32,8 @@ const ProductModal = (props) => {
         }
     }
 
-    const handleUpdate = async() => {
+    const handleUpdate = async(event) => {
+        event.preventDefault()
         await updateProduct(updatedProduct)
     }
 
@@ -81,7 +82,7 @@ const ProductModal = (props) => {
                             <Form.Label>Product Image</Form.Label>
                             <Form.Control type="file"  disabled={updateDisabled} name='drinkImage'/>
                         </Form.Group> */}
-                        <Button variant="primary" disabled={updateDisabled} onClick={handleUpdate} style={{margin: '15px 0'}}>
+                        <Button variant="primary" disabled={updateDisabled} onClick={e => handleUpdate(e)} style={{margin: '15px 0'}}>
                             Update
                         </Button>
                     </Form>

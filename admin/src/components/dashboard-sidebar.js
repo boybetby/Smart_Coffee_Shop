@@ -3,85 +3,104 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { ChartBar as ChartBarIcon } from '../icons/chart-bar';
-import { Cog as CogIcon } from '../icons/cog';
 import { Lock as LockIcon } from '../icons/lock';
 import { Selector as SelectorIcon } from '../icons/selector';
 import { ShoppingBag as ShoppingBagIcon } from '../icons/shopping-bag';
 import { User as UserIcon } from '../icons/user';
-import { UserAdd as UserAddIcon } from '../icons/user-add';
 import { Users as UsersIcon } from '../icons/users';
-import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/authContext';
 
-const items = [
-  {
-    href: '/',
-    icon: (<ChartBarIcon fontSize="small" />),
-    title: 'Dashboard'
-  },
-  {
-    href: '/customers',
-    icon: (<UsersIcon fontSize="small" />),
-    title: 'Customers'
-  },
-  {
-    href: '/products',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Products'
-  },
-  {
-    href: '/account',
-    icon: (<UserIcon fontSize="small" />),
-    title: 'Account'
-  },
-  {
-    href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: (<LockIcon fontSize="small" />),
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: (<XCircleIcon fontSize="small" />),
-    title: 'Error'
-  }
-];
+
 
 export const DashboardSidebar = (props) => {
-  const { open, onClose } = props;
-  const router = useRouter();
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
-    defaultMatches: true,
-    noSsr: false
-  });
+  const {
+    authState: { user },
+    logoutUser
+  } = useContext(AuthContext)
 
-  useEffect(
-    () => {
-      if (!router.isReady) {
-        return;
-      }
-
-      if (open) {
-        onClose?.();
-      }
+  let items = [
+    {
+      href: '/',
+      icon: (<ChartBarIcon fontSize="small" />),
+      title: 'Dashboard'
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.asPath]
-  );
+    {
+      href: '/customers',
+      icon: (<UsersIcon fontSize="small" />),
+      title: 'Customers'
+    },
+    {
+      href: '/products',
+      icon: (<ShoppingBagIcon fontSize="small" />),
+      title: 'Products'
+    },
+    {
+      href: '/data',
+      icon: (<LockIcon fontSize="small" />),
+      title: "Customer's data management"
+    },
+    {
+      href: '/account',
+      icon: (<UserIcon fontSize="small" />),
+      title: 'Account'
+    },
+    {
+      href: '/settings',
+      icon: (<LockIcon fontSize="small" />),
+      title: "Change password"
+    }
+  ];
+  
+  
+  if(!user) {
+    items = [
+      {
+        href: '/login',
+        icon: (<LockIcon fontSize="small" />),
+        title: 'Login'
+      }
+    ];
+  }
+  else if(user.role === 'ADMIN') {
+    items = [
+      {
+        href: '/',
+        icon: (<ChartBarIcon fontSize="small" />),
+        title: 'Dashboard'
+      },
+      {
+        href: '/customers',
+        icon: (<UsersIcon fontSize="small" />),
+        title: 'Customers'
+      },
+      {
+        href: '/products',
+        icon: (<ShoppingBagIcon fontSize="small" />),
+        title: 'Products'
+      },
+      
+      {
+        href: '/account',
+        icon: (<UserIcon fontSize="small" />),
+        title: 'Account'
+      },
+      {
+        href: '/settings',
+        icon: (<LockIcon fontSize="small" />),
+        title: "Change password"
+      }
+    ];
+  } 
 
-  const content = (
+  const handleClick = () => {
+    logoutUser()
+  }
+  
+  let content = (
     <>
       <Box
         sx={{
@@ -124,15 +143,13 @@ export const DashboardSidebar = (props) => {
                   color="inherit"
                   variant="subtitle1"
                 >
-                  Acme Inc
+                  Coffee Admin
                 </Typography>
                 <Typography
                   color="neutral.400"
                   variant="body2"
                 >
-                  Your tier
-                  {' '}
-                  : Premium
+                  <a onClick={handleClick}>Logout</a>
                 </Typography>
               </div>
               <SelectorIcon
@@ -162,59 +179,32 @@ export const DashboardSidebar = (props) => {
           ))}
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />
-        <Box
-          sx={{
-            px: 2,
-            py: 3
-          }}
-        >
-          <Typography
-            color="neutral.100"
-            variant="subtitle2"
-          >
-            Need more features?
-          </Typography>
-          <Typography
-            color="neutral.500"
-            variant="body2"
-          >
-            Check out our Pro solution template.
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              mt: 2,
-              mx: 'auto',
-              width: '160px',
-              '& img': {
-                width: '100%'
-              }
-            }}
-          >
-            <img
-              alt="Go to pro"
-              src="/static/images/sidebar_pro.png"
-            />
-          </Box>
-          <NextLink
-            href="https://material-kit-pro-react.devias.io/"
-            passHref
-          >
-            <Button
-              color="secondary"
-              component="a"
-              endIcon={(<OpenInNewIcon />)}
-              fullWidth
-              sx={{ mt: 2 }}
-              variant="contained"
-            >
-              Pro Live Preview
-            </Button>
-          </NextLink>
-        </Box>
+        
       </Box>
     </>
   );
+
+  const { open, onClose } = props;
+  const router = useRouter();
+  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
+    defaultMatches: true,
+    noSsr: false
+  });
+
+  useEffect(
+    () => {
+      if (!router.isReady) {
+        return;
+      }
+
+      if (open) {
+        onClose?.();
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router.asPath]
+  );
+
 
   if (lgUp) {
     return (

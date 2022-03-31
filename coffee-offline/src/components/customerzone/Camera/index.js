@@ -78,7 +78,7 @@ const Camera = () => {
                 screenshotFormat="image/jpeg"
                 forceScreenshotSourceSize="true"
             />
-            <Button variant="primary" className='btn_camera' onClick={handleClick} >DETECT</Button>
+            <Button variant="primary" className='btn_camera' onClick={handleClick} disabled={!subFaceMatcher}>DETECT</Button>
         </div>
     )
 }

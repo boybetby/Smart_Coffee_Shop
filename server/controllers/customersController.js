@@ -8,6 +8,11 @@ const moment = require('moment')
 const fs = require('fs');
 const path = require('path');
 
+//send sms
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
 const getCustomers = async (req, res) => {
   try {
     const customers = await customerModel.find();
@@ -37,8 +42,8 @@ const createNewCustomer = async(req, res) => {
       console.log(error)
     }
 
-
     await newCustomer.save()
+ 
     res.status(202).json({
       success: true,
       newCustomer
@@ -173,25 +178,26 @@ const loginCustomer = async (req, res) => {
 			return res
 				.status(400)
 				.json({ success: false, message: 'Incorrect username or password' })
-		// Username found
-		const passwordValid = await argon2.verify(customer.password, password)
-		if (!passwordValid)
-			return res
-				.status(400)
-				.json({ success: false, message: 'Incorrect username or password' })
-
-		// All good
-		// Return token
-		const accessToken = jwt.sign(
-			{ customerId: customer._id },
-			process.env.ACCESS_TOKEN_SECRET
-		)
-
-		res.json({
-			success: true,
-			message: 'User logged in successfully',
-			accessToken
-		})
+    else {
+      const passwordValid = await argon2.verify(customer.password, password)
+      if (!passwordValid)
+        return res
+          .status(400)
+          .json({ success: false, message: 'Incorrect username or password' })
+  
+      // All good
+      // Return token
+      const accessToken = jwt.sign(
+        { customerId: customer._id },
+        process.env.ACCESS_TOKEN_SECRET
+      )
+  
+      res.json({
+        success: true,
+        message: 'User logged in successfully',
+        accessToken
+      })
+    }
 	} catch (error) {
 		console.log(error)
 		res.status(500).json({ success: false, message: 'Internal server error' })
@@ -264,7 +270,7 @@ const registerCustomer = async (req, res) => {
         { customerId: newcustomer._id },
         process.env.ACCESS_TOKEN_SECRET
       )
-      
+    
       res.json({
         success: true,
         message: 'customer created successfully',
@@ -304,7 +310,7 @@ const updateCustomer = async (req, res) => {
           },
           { new: true }
         );
-        await customerModel.findOneAndDelete({'_id': findCustomer._id})
+        if(customer) await customerModel.findOneAndDelete({'_id': findCustomer._id})
         res.status(202).json({
           success: true,
           message: 'Customer updated',
@@ -322,6 +328,15 @@ const updateCustomer = async (req, res) => {
           },
           { new: true }
         );
+        // try {
+        //   client.messages.create({
+        //     body: "Your Smart Coffee account's password is 123456. Please do not share this password",
+        //     from: '+14405956709',
+        //     to: `+84${customer.username.substring(1)}`
+        //   }).then(message => console.log(message.sid));
+        // } catch (error) {
+        //   console.log(error)
+        // }
         res.status(202).json({
           success: true,
           message: 'Customer updated',

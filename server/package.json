@@ -35,7 +35,8 @@
     "node-fetch": "^2.6.6",
     "path": "^0.12.7",
     "slug": "^5.1.1",
-    "sugar": "^2.0.6"
+    "sugar": "^2.0.6",
+    "twilio": "^3.76.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

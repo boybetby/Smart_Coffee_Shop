@@ -13,8 +13,6 @@ const Information = () => {
         <p>No information detected</p>
     )
 
-    console.log(customer)
-
     if(isDetecting) {
         informationBody = (
             <div className=''>

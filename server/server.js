@@ -12,9 +12,11 @@ const drinkRouter = require('./routers/drinkRouter')
 const orderRouter = require('./routers/orderRouter')
 const userRouter = require('./routers/userRouter')
 const adminRouter = require('./routers/adminRouter')
+const couponRouter = require('./routers/couponRouter')
 
 const { trainingStart, readTrainingData } = require('./faceRecognition/trainingData')
 const { main } = require('./productRecommendation/ML')
+const customerCoupon = require('./models/customerCoupon')
 
 const connectDB = async () => {
     try {
@@ -44,8 +46,12 @@ app.use('/api/customer', handleRequest, customerRouter)
 app.use('/api/drink', handleRequest, drinkRouter)
 app.use('/api/order', handleRequest, orderRouter)
 app.use('/api/user', handleRequest, userRouter)
+app.use('/api/coupon', handleRequest, couponRouter)
 
 //@admin
+// var server = app.listen();
+// server.setTimeout(9000000000000);
+
 app.use('/api/admin', handleRequest, adminRouter)
 app.use('/trainingFaceRecognition', trainingStart)
 app.use('/trainingProductRecommendation', main)

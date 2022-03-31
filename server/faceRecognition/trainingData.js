@@ -14,18 +14,22 @@ const files = fs.readdirSync(dir)
 
 async function loadTrainingData(){
     const faceDescriptors = []
-
     for(const file of files){
+        console.log(`training ${file}...`)
         const descriptors = []
         const imagefolders = fs.readdirSync(`./uploads/${file}`)
-        for(const imagefolder of imagefolders){
-            const image = await canvas.loadImage(`./uploads/${file}/${imagefolder}`);
-            const detection = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor()
-            descriptors.push(detection.descriptor)
+        try {
+            for(const imagefolder of imagefolders){
+                const image = await canvas.loadImage(`./uploads/${file}/${imagefolder}`);
+                const detection = await faceapi.detectSingleFace(image).withFaceLandmarks().withFaceDescriptor()
+                descriptors.push(detection.descriptor)
+            }
+            const newLabeledFaceDescriptors = new faceapi.LabeledFaceDescriptors(file, descriptors)
+            faceDescriptors.push(newLabeledFaceDescriptors)
+            console.log(`${file} done`)
+        } catch (error) {
+            console.log(error)
         }
-        const newLabeledFaceDescriptors = new faceapi.LabeledFaceDescriptors(file, descriptors)
-        faceDescriptors.push(newLabeledFaceDescriptors)
-        console.log(`${file} data trained!`)
     }
     return faceDescriptors
 }

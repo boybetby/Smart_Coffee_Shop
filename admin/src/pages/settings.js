@@ -23,9 +23,8 @@ const Settings = () => (
           sx={{ mb: 3 }}
           variant="h4"
         >
-          Settings
+          Change password
         </Typography>
-        <SettingsNotifications />
         <Box sx={{ pt: 3 }}>
           <SettingsPassword />
         </Box>

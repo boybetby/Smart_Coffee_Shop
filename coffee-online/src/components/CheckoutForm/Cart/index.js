@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { ShoppingContext } from '../../ShoppingContext/ShoopingContext'
-
+import './style.css'
 
 const Cart = () => {
     const { cartProducts, orderType, setOrderType } = useContext(ShoppingContext)
@@ -34,13 +34,40 @@ const Cart = () => {
                             </>
                     </div>
                     ))}
-                <div className='cart-info'>
+                <div className='cart-info' style={{height:'30px'}}>
+                    <div className='cart-product'>
+                        <p>SUBTOTAL:</p>
+                    </div>
+                    <div className='cart-amount'>
+                        <p><b>{calculateTotal()} VND</b></p>
+                    </div>    
+                </div>
+                <div className='cart-info' style={{height:'30px'}}>
                     <div className='cart-product'>
                         <p><b>TOTAL:</b></p>
                     </div>
                     <div className='cart-amount'>
                         <p><b>{calculateTotal()} VND</b></p>
                     </div>    
+                </div>
+                <div className='cart-info'>
+                    <div className='cart-product'>
+                        <form>
+                            <label>Coupon:
+                                    <input 
+                                        type="text" 
+                                        name="coupon" 
+                                        // value={inputs.fullName || ""} 
+                                        // onChange={handleChange}
+                                        // required = {true}
+                                        />
+                            </label>
+                        </form>
+                    </div>
+                    <div className='cart-amount' style={{marginTop: '30px'}}>
+                        <button class='btn_coupon'>Use</button>
+                    </div> 
+                   
                 </div>
                 <div className="radio">
                     <label className='btn_radio'>
