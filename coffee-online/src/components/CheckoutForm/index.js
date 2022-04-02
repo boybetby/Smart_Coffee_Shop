@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ShoppingContext } from '../ShoppingContext/ShoopingContext'
 import Information from './InformationForm/index';
 import Cart from './Cart/index';
+import CouponsList from '../CouponsList';
 import './style.css'
 
 const CheckoutForm = () => {
@@ -18,16 +19,21 @@ const CheckoutForm = () => {
 
     useEffect(() => {
         protectRouter()
-    })
+    }, [])
 
     return (
         <div className="checkout-main">
                 <div className="grid-item left">
                     <Information/>
                 </div>
-                <div className="grid-item right">
-                    <Cart/>
-                </div>     
+                <div className="right">
+                    <div className="right_cart">
+                        <Cart/>
+                    </div>          
+                    <div className="right_coupon">
+                        <CouponsList />
+                    </div>          
+                </div>
         </div>
     )
 }

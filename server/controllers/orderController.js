@@ -45,36 +45,38 @@ const createOrderOnline = async (req, res) => {
         message: "No product ordered"
       })
     }
-    const findCustomer = await customerModel.findOne({username: req.body.phoneNumber})
-    
-    let newOrder = new orderModel(req.body)
-
-    if(!findCustomer){
-      const newCustomer = new customerModel({username: req.body.username})
-      await newCustomer.save();
-    }
-
-    await newOrder.save();
-
-    const updateCustomerOrders = await customerModel.findOneAndUpdate(
-      {
-          username: req.body.username
-      },
-      {
-          $push: {
-            orders: newOrder._id
-          }
-      },
-      {
-          new: true
+    else {
+      const findCustomer = await customerModel.findOne({username: req.body.customer})
+      
+      let newOrder = new orderModel(req.body)
+  
+      if(!findCustomer){
+        const newCustomer = new customerModel({username: req.body.customer})
+        await newCustomer.save();
       }
-    )
-
-    res.status(200).json({
-      success: true,
-      order: newOrder,
-      newCoupons:  req.newCoupons
-    });
+  
+      await newOrder.save();
+  
+      const updateCustomerOrders = await customerModel.findOneAndUpdate(
+        {
+            username: req.body.customer
+        },
+        {
+            $push: {
+              orders: newOrder._id
+            }
+        },
+        {
+            new: true
+        }
+      )
+  
+      res.status(200).json({
+        success: true,
+        order: newOrder,
+        newCoupons:  req.newCoupons
+      });
+    }
   } catch (err) {
     res.status(500).json({ error: err});
   }

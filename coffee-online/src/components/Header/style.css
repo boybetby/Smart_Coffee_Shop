@@ -1,4 +1,4 @@
-.container {
+.nav_coffee {
   position: fixed;
   top: 0px;
   width: 100%;
@@ -9,7 +9,7 @@
   z-index: 1;
 }
 
-.container .logo {
+.nav_coffee .logo {
   position: relative;
   height: 80px;
   width: 200px;

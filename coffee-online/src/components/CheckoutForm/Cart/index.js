@@ -1,14 +1,47 @@
 import React, { useContext, useState } from 'react'
 import { ShoppingContext } from '../../ShoppingContext/ShoopingContext'
+import axios from 'axios'
+import { apiUrl } from '../../../constants/constants'
+import swal from 'sweetalert'
 import './style.css'
 
 const Cart = () => {
-    const { cartProducts, orderType, setOrderType } = useContext(ShoppingContext)
-
+    const { cartProducts, orderType, setOrderType, coupon, setCoupon, couponId, setCouponId } = useContext(ShoppingContext)
+    
     const handleOrderType = (event) => {
         setOrderType(event.target.value);
     }
+    
+    const handleCouponChange = (event) => {
+        setCouponId(event.target.value)
+    }
 
+    const handleUseCouponClick = async() => {
+        try {
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/coupon/findcoupon`,
+                data: {
+                    "couponId": couponId
+                }
+            });
+            if(response.data.success) {
+                if(response.data.coupon.conditionValue <= calculateTotal() || response.data.coupon.usage === 'NEXT')
+                        setCoupon(response.data.coupon)
+                else {
+                    swal({
+                        title: "FALSE!",
+                        text: "Your order not meet required coupon's requirement",
+                        icon: "warning",
+                        button: "OK",
+                    })
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
     const calculateTotal = () => {
         let total = 0;
         if(cartProducts.length !== 0){
@@ -16,6 +49,12 @@ const Cart = () => {
             total = result;
         }
         return total
+    }
+
+    let finalPrice = calculateTotal()
+    if(coupon) {
+        finalPrice = (coupon.discountUnit === "PERCENTAGE") ? calculateTotal()*(1-coupon.discountValue/100) : calculateTotal()-coupon.discountValue
+        if(finalPrice < 0) finalPrice = 0
     }
 
     return (
@@ -47,7 +86,7 @@ const Cart = () => {
                         <p><b>TOTAL:</b></p>
                     </div>
                     <div className='cart-amount'>
-                        <p><b>{calculateTotal()} VND</b></p>
+                        <p><b>{finalPrice} VND</b></p>
                     </div>    
                 </div>
                 <div className='cart-info'>
@@ -58,14 +97,13 @@ const Cart = () => {
                                         type="text" 
                                         name="coupon" 
                                         // value={inputs.fullName || ""} 
-                                        // onChange={handleChange}
-                                        // required = {true}
+                                        onChange={handleCouponChange}
                                         />
                             </label>
                         </form>
                     </div>
                     <div className='cart-amount' style={{marginTop: '30px'}}>
-                        <button class='btn_coupon'>Use</button>
+                        <button className='btn_coupon' onClick={handleUseCouponClick}>Use</button>
                     </div> 
                    
                 </div>

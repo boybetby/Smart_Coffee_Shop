@@ -6,7 +6,7 @@ import Logo from './../../assets/logo.png'
 
 const Header = () => {
     return (
-        <div className="container">      
+        <div className="nav_coffee">      
                 <Link to="/" style={{"display": "block", "width": "200px"}}>
                     <div style={{backgroundImage: `url(${Logo})`}} className="logo"></div>
                 </Link>         

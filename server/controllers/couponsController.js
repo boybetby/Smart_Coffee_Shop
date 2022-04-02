@@ -5,10 +5,23 @@ const  customerCouponModel = require('../models/customerCoupon')
 
 const getCoupons = async (req, res) => {
   try {
-    const coupons = await couponModel.find();
+    var date = new Date();
+    const coupons = await couponModel.find({
+      usage: 'THIS',
+      startDate: {
+        $lte: date
+      },
+      endDate: {
+        $gte: date
+      }
+    });
+    const publicCoupons = coupons.filter(e => e.applyTo === 'EVERYONE')
+    const accountCoupons = coupons.filter(e => e.applyTo === 'ACCOUNT')
+
     res.status(200).json({
       success: true,
-      coupons
+      public: publicCoupons,
+      account: accountCoupons
     });
   } catch (err) {
     res.status(500).json({ error: err });
@@ -20,18 +33,27 @@ const findCoupon = async (req, res) => {
   try {
     const {couponId} = req.body
 
-    const coupon = await couponModel.findOne({couponId})
-    if(!coupon){
-      res.status(404).json({ 
-        success: false,
-        message : 'Can not find coupon' 
+    const coupon = await couponModel.findById(couponId)
+    if(coupon) {
+      res.status(202).json({ 
+        success: true,
+        coupon: coupon
       });
     }
-    else{
-      res.status(200).json({ 
-        success: true,
-        coupon 
-      });
+    else {
+      const customerCoupon = await customerCouponModel.findById(couponId)
+      if(customerCoupon) {
+        const coupon = await couponModel.findById(customerCoupon.couponId)
+        res.status(202).json({ 
+          success: true,
+          coupon: coupon 
+        });
+      } else {
+        res.status(404).json({ 
+          success: false,
+          message: 'Invalid coupon'
+        });
+      }
     }
   }catch (err){
     res.status(500).json({ 
@@ -57,9 +79,6 @@ const createCoupon = async (req, res) => {
   }
 };
 
-const checkOrderCoupon = async(req, res) => {
-  
-}
 
 const updateCoupon = async (req, res) => {
   try {
@@ -79,11 +98,12 @@ const updateCoupon = async (req, res) => {
 };
 
 
-const test = async(req, res) => {
+const checkCouponCondition = async(req, res) => {
   try {
       const data = req.body
-      const customer = await customerModel.findOne({username: data.username})
-      const find = await customerCouponModel.find({customerId: customer._id})
+      const customer = await customerModel.findOne({username: data.customer})
+      const find = await customerCouponModel.find({customerId: customer._id, isCreated: true})
+      console.log(find)
       const coupons = []
       var date = new Date();
       try {   
@@ -195,4 +215,4 @@ const deleteCoupon = async(req, res) => {
 }
 
 
-module.exports = { getCoupons, createCoupon, test }
+module.exports = { getCoupons, createCoupon, checkCouponCondition, findCoupon }

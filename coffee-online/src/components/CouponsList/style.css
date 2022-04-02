@@ -1,0 +1,4 @@
+.couponsSection p:hover{
+    cursor:pointer;
+    color: lightpink;
+}

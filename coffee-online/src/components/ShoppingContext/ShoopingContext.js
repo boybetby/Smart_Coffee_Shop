@@ -13,6 +13,8 @@ export const ShoppingProvider = props => {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [customer, setCustomer] = useState({})
     const [orderType, setOrderType]= useState('DELIVERY')
+    const [coupon, setCoupon]= useState()
+    const [couponId, setCouponId] = useState()
 
     useEffect(() => {
         (async () => {
@@ -56,9 +58,26 @@ export const ShoppingProvider = props => {
     let body = (
         <div></div>
     )
+
+    const varibles = {
+        productList, 
+        cartProducts,
+        setCartProducts, 
+        isAuthenticated, 
+        setIsAuthenticated, 
+        loadUser , customer, 
+        setCustomer, 
+        orderType, 
+        setOrderType,
+        coupon,
+        setCoupon,
+        couponId,
+        setCouponId
+    }
+
     if(productList) {
         body = (
-            <ShoppingContext.Provider value={ { productList, cartProducts, setCartProducts, isAuthenticated, setIsAuthenticated, loadUser , customer, setCustomer, orderType, setOrderType } }>
+            <ShoppingContext.Provider value={ varibles }>
                 {props.children}
             </ShoppingContext.Provider>
         )

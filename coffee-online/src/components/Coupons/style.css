@@ -27,6 +27,8 @@
 }
 
 .btn-floating {
+    background-color: white !important;
+    border-color: gray !important;
 	position: fixed;
 	right: 3rem;
 	bottom: 3rem;

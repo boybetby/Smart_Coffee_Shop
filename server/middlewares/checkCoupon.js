@@ -4,11 +4,15 @@ const  orderModel = require('../models/order')
 const  customerCouponModel = require('../models/customerCoupon') 
 
 const checkCouponCondtion = async(req, res, next) => {
+  if(req.body.coupon) {
+    next()
+  }
+  else {
     try {
         const data = req.body
-        const customer = await customerModel.findOne({username: data.username})
-        const coupons = []
+        const customer = await customerModel.findOne({username: data.customer})
         if(!customer.isCreated) next()
+        const coupons = []
         const find = await customerCouponModel.find({customerId: customer._id})
         var date = new Date();
         try {   
@@ -79,6 +83,7 @@ const checkCouponCondtion = async(req, res, next) => {
         console.log(error)
         next()
     }
+  }
   }
   
 

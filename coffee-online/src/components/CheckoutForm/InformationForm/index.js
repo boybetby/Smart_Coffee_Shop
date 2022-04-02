@@ -10,7 +10,7 @@ const Information = () => {
   const [province, setProvince] = useState();
   const [district, setDistrict] = useState();
   const [ward, setWard] = useState();
-  const {cartProducts, setCartProducts, orderType} = useContext(ShoppingContext)
+  const {cartProducts, setCartProducts, orderType, coupon, setCoupon, couponId} = useContext(ShoppingContext)
 
   useEffect(() => {
     loadProvince()
@@ -24,7 +24,12 @@ const Information = () => {
         total = result;
     }
     return total
-}
+  }
+
+  if(coupon) {
+    const finalPrice = (coupon.discountUnit === "PERCENTAGE") ? calculateTotal()*(1-coupon.discountValue/100) : calculateTotal()-coupon.discountValue
+    console.log(finalPrice)
+  }
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -37,28 +42,48 @@ const Information = () => {
       district: district.find(x => x.DistrictID == order.district).DistrictName,
       ward: ward.find(x => x.WardCode === order.ward).WardName
     }
+
+    let finalPrice = order.totalprice
+    if(coupon) finalPrice = (coupon.discountUnit === "PERCENTAGE") ? order.totalprice*(1-coupon.discountValue/100) : order.totalprice-coupon.discountValue
+
     const response = await axios({
       method: 'post',
       url:  `${apiUrl}/api/order/orderonline`,
       data: {
-        username: order.phoneNumber,
+        customer: order.phoneNumber,
         customerName: order.fullName,
         drinks: order.products,
         totalPrice: order.totalprice,
+        finalPrice: finalPrice,
+        coupon: couponId || null,
         type: order.type,
         customerAddress: `${order.address}, ${address.ward}, ${address.district}, ${address.province}`
       }
     });
-    console.log(response.data)
     if(response.data.success){
-      swal({
-        title: "SUCCESS!",
-        text: "Your order has been placed",
-        icon: "success",
-        button: "OK",
-      }).then(() => {
-        afterDone()
-      });
+      console.log(response.data)
+      if(response.data.newCoupons) {
+        setCoupon()
+        swal({
+          title: "SUCCESS!",
+          text: (response.data.newCoupons.length===1) ? `You have received a new coupon` : `You have received ${response.data.newCoupons.length} new coupons`,
+          icon: "success",
+          button: "OK",
+        }).then(() => {
+          afterDone()
+        });
+      }
+      else {
+        setCoupon()
+        swal({
+          title: "SUCCESS!",
+          text: "Your order has been placed",
+          icon: "success",
+          button: "OK",
+        }).then(() => {
+          afterDone()
+        });
+      }
     }
     else {
       swal({
