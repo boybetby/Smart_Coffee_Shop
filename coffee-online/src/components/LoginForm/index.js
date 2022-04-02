@@ -8,8 +8,8 @@ import { apiUrl, LOCAL_STORAGE_TOKEN_NAME } from '../../constants/constants'
 
 import './style.css'
 
-const LoginForm = () => {
-	const {loadUser} = useContext(ShoppingContext)
+const LoginForm = ({getCustomerCoupons}) => {
+	const {loadUser, customer} = useContext(ShoppingContext)
 
 	const [loginForm, setLoginForm] = useState({
 		username: '',
@@ -34,13 +34,15 @@ const LoginForm = () => {
 				setAlert({ type: 'danger', message: response.data.message })
 				setTimeout(() => setAlert(null), 5000)
 			}
-			if (response.data.success)
-			localStorage.setItem(
-				LOCAL_STORAGE_TOKEN_NAME,
-				response.data.accessToken
-				)
+			if (response.data.success) {
+				localStorage.setItem(
+					LOCAL_STORAGE_TOKEN_NAME,
+					response.data.accessToken
+					)
+				}
 				
-			await loadUser()
+				await loadUser()
+				getCustomerCoupons(customer._id)
 		} catch (error) {
 			console.log(error)
 		}

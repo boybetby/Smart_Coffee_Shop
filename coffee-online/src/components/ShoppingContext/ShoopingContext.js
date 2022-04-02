@@ -15,6 +15,7 @@ export const ShoppingProvider = props => {
     const [orderType, setOrderType]= useState('DELIVERY')
     const [coupon, setCoupon]= useState()
     const [couponId, setCouponId] = useState()
+    const [ customerCoupons, setCustomerCoupons ] = useState()
 
     useEffect(() => {
         (async () => {
@@ -34,6 +35,7 @@ export const ShoppingProvider = props => {
 			if (response.data.success) {
 				setIsAuthenticated(true)
                 setCustomer(response.data.customer)
+                getCustomerCoupons(response.data.customer._id)
 			}
 		} catch (error) {
 			localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME)
@@ -41,6 +43,21 @@ export const ShoppingProvider = props => {
 			setIsAuthenticated(false)
 		}
 	}
+
+    const getCustomerCoupons = async(id) => {
+        try {
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/coupon/findByCustomerId`,
+                data: {
+                    id: id
+                }
+            });
+            if(response.data.success) setCustomerCoupons(response.data.coupons)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     const loadMenu = async() => {
@@ -72,7 +89,8 @@ export const ShoppingProvider = props => {
         coupon,
         setCoupon,
         couponId,
-        setCouponId
+        setCouponId,
+        customerCoupons
     }
 
     if(productList) {

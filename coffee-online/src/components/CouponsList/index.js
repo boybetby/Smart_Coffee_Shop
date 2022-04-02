@@ -7,7 +7,7 @@ import './style.css'
 function CouponsList() {
     const [ coupons, setCoupons ] = useState()
     const [ selectedCoupon, setSelectedCoupon ] = useState()
-    const [modalShow, setModalShow] = useState(false);
+    const [ modalShow, setModalShow ] = useState(false);
 
     const getCoupons = async() => {
         try {
@@ -21,6 +21,13 @@ function CouponsList() {
         }
     }
 
+    let publicCoupons = (
+        <p>0 coupon is available for everyone right now</p>
+    )
+    let accountCoupons = (
+        <p>0 coupon is available for accounts right now</p>
+    )
+    
     const handleClick = (e) => {
         setSelectedCoupon(e)
         setModalShow(true)
@@ -30,24 +37,18 @@ function CouponsList() {
         getCoupons()
     }, [])
 
-    let publicCoupons = (
-        <p>0 coupon is available for everyone right now</p>
-    )
-    let accountCoupons = (
-        <p>0 coupon is available for accounts right now</p>
-    )
 
     if(coupons) {
         if(coupons.public.length!==0) {
             publicCoupons = coupons.public.map(e => (
-                <div>
+                <div key={e._id}>
                     <p onClick={() => handleClick(e)}>{e.couponName}</p>
                 </div>
             ))
         }
         if(coupons.account.length!==0) {
             accountCoupons = coupons.account.map(e => (
-                <div>
+                <div key={e._id}>
                     <p onClick={() => handleClick(e)}>{e.couponName}</p>
                 </div>
             ))

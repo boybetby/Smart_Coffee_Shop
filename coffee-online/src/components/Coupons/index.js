@@ -5,10 +5,15 @@ import { Link } from "react-router-dom";
 import addIcon from './coupon.svg'
 import './style.css'
 import LoginForm from '../LoginForm/index'
+import CustomerCouponModal from './CustomerCouponModal'
 
 const Coupons = () => {
-    const {isAuthenticated, customer}  = useContext(ShoppingContext)
+    const {isAuthenticated, customer, customerCoupons}  = useContext(ShoppingContext)
     const [showCoupons, setShowCoupons] = useState(false)
+
+    const [ selectedCoupon, setSelectedCoupon ] = useState()
+    const [ modalShow, setModalShow ] = useState(false);
+  
     const toggleCoupons = () => {
         if(showCoupons){
             setShowCoupons(false)
@@ -18,12 +23,23 @@ const Coupons = () => {
         }
     }
 
+    const handleClick = (e) => {
+        setSelectedCoupon(e)
+        setModalShow(true)
+    }
+
     let couponsBody
     if(showCoupons){
         if(isAuthenticated){
             couponsBody = (
                 <div className='coupons'>
-                    <h2 style={{"width": "200px"}}>Hi {customer.customerName}</h2>
+                    <h4>Hi {customer.customerName}</h4>
+                    <h5>Your coupons: </h5>
+                    <div>
+                        {(customerCoupons.length > 0)? customerCoupons.map(e => (
+                            <p key={e.coupon._id} onClick={() => handleClick(e)}>{e.detail.couponName}</p>
+                        )) : <p>You have no coupon</p>}
+                    </div>
                 </div>
             )
         }
@@ -45,6 +61,11 @@ const Coupons = () => {
     return (
         <div>
            {couponsBody}
+           {(selectedCoupon) ? (<CustomerCouponModal 
+                 show={modalShow}
+                 onHide={() => setModalShow(false)}
+                 coupon= {selectedCoupon}
+            />) : (<div></div>)}
             <Button
                 className='btn-floating'
                 onClick={toggleCoupons.bind(this, true)}

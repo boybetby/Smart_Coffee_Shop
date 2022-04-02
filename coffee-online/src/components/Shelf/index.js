@@ -42,7 +42,6 @@ const Shelf = () => {
                     </div> 
                 )}
             </div>
-            <Coupons />
         </div>
     )
 }

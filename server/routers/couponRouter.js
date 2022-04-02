@@ -1,11 +1,13 @@
 const express = require("express")
-const { getCoupons, createCoupon, checkCouponCondition, findCoupon } = require('../controllers/couponsController')
+const { getCoupons, createCoupon, checkCouponCondition, findCoupon, getCouponsByCustomerId } = require('../controllers/couponsController')
 
 const router = express.Router();
 
 router.get('/', getCoupons)
 
 router.post('/createCoupon', createCoupon);
+
+router.post('/findByCustomerId', getCouponsByCustomerId);
 
 router.post('/findCoupon', findCoupon);
 

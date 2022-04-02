@@ -28,6 +28,46 @@ const getCoupons = async (req, res) => {
   }
 };
 
+const getCouponsByCustomerId = async(req, res) => {
+  try {
+    var date = new Date();
+    const couponsById = await customerCouponModel.find({
+      customerId: req.body.id,
+      startDate: {
+        $lte: date
+      },
+      endDate: {
+        $gte: date
+      }
+    })
+    if(!couponsById) {
+      res.status(202).json({
+        success: true,
+        coupons: []
+      })
+    } 
+    else {
+      const result = []
+      await Promise.all (couponsById.map(async(e) => {
+        const detail = await couponModel.findById(e.couponId)
+        const obj = {
+          coupon: e,
+          detail
+        }
+        result.push(obj)
+      }))
+      res.status(202).json({
+        success: true,
+        coupons: result
+      })
+    }
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+}
 
 const findCoupon = async (req, res) => {
   try {
@@ -214,5 +254,12 @@ const deleteCoupon = async(req, res) => {
   }
 }
 
+const couponsData = {
+  getCoupons, 
+  createCoupon, 
+  checkCouponCondition, 
+  findCoupon, 
+  getCouponsByCustomerId
+}
 
-module.exports = { getCoupons, createCoupon, checkCouponCondition, findCoupon }
+module.exports = couponsData

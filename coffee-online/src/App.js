@@ -7,6 +7,7 @@ import Shelf from './components/Shelf/index'
 import ShoppingCart from './components/ShoppingCart/index'
 import CheckoutForm from './components/CheckoutForm/index'
 import RegisterForm from './components/RegisterForm/index'
+import Coupons from './components/Coupons/index'
 // import Footer from './components/Footer/index'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route exact path='/register' element={<RegisterForm/>} />
           </Routes>
         </Router>
+        <Coupons />
       </ShoppingProvider>
    
     </>

@@ -1,19 +1,25 @@
 .coupons {
     position: fixed;
     right: 3rem;
-	bottom: 7.5rem;
+    bottom: 7.5rem;
     width: 300px;
     height: 350px;
     border-radius: 20px;
-    background-color: lightgray;
-    display: grid;
-    text-align: center;
+    background-color: #f4e3f7;
     justify-content: center;
-    align-content: center;
+    justify-items: start;
+    padding: 20px 20px;
+    overflow-y: auto;
 }
 
-.coupons h2{ 
+.coupons h5{ 
+    height: auto;
     color: darkcyan;
+}
+
+.coupons p:hover{ 
+    cursor: pointer;
+    color: lightcoral;
 }
 
 .coupons a {
