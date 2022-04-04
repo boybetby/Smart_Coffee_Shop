@@ -29,7 +29,6 @@ const LoginForm = ({getCustomerCoupons}) => {
 				url: `${apiUrl}/api/customer/login`,
 				data: loginForm
 			});
-			console.log(response.data)
 			if (!response.data.success) {
 				setAlert({ type: 'danger', message: response.data.message })
 				setTimeout(() => setAlert(null), 5000)
@@ -42,7 +41,6 @@ const LoginForm = ({getCustomerCoupons}) => {
 				}
 				
 				await loadUser()
-				getCustomerCoupons(customer._id)
 		} catch (error) {
 			console.log(error)
 		}

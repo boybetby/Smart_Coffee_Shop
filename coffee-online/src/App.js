@@ -22,8 +22,8 @@ function App() {
             <Route exact path='/checkout' element={<CheckoutForm/>} />
             <Route exact path='/register' element={<RegisterForm/>} />
           </Routes>
+          <Coupons />
         </Router>
-        <Coupons />
       </ShoppingProvider>
    
     </>

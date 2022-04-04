@@ -8,7 +8,7 @@ import LoginForm from '../LoginForm/index'
 import CustomerCouponModal from './CustomerCouponModal'
 
 const Coupons = () => {
-    const {isAuthenticated, customer, customerCoupons}  = useContext(ShoppingContext)
+    const {isAuthenticated, customer, customerCoupons, logoutUser}  = useContext(ShoppingContext)
     const [showCoupons, setShowCoupons] = useState(false)
 
     const [ selectedCoupon, setSelectedCoupon ] = useState()
@@ -30,7 +30,7 @@ const Coupons = () => {
 
     let couponsBody
     if(showCoupons){
-        if(isAuthenticated){
+        if(isAuthenticated && customerCoupons){
             couponsBody = (
                 <div className='coupons'>
                     <h4>Hi {customer.customerName}</h4>
@@ -40,13 +40,14 @@ const Coupons = () => {
                             <p key={e.coupon._id} onClick={() => handleClick(e)}>{e.detail.couponName}</p>
                         )) : <p>You have no coupon</p>}
                     </div>
+                    <div className="btn_logout" onClick={logoutUser}><h5>Logout</h5></div>
                 </div>
             )
         }
         else {
             couponsBody = (
                  <div className='coupons'>
-                 <h2 style={{"width": "200px"}}>Please login to see your coupons</h2>
+                 <h2 style={{width: "200px", textAlign: "center"}}>Please login to see your coupons</h2>
                  <LoginForm />
                  <p>
                      <Link to='/register'>

@@ -76,6 +76,12 @@ export const ShoppingProvider = props => {
         <div></div>
     )
 
+    // Logout
+	const logoutUser = () => {
+		localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME)
+		setCustomer({})
+        setCustomerCoupons()
+	}
     const varibles = {
         productList, 
         cartProducts,
@@ -90,7 +96,8 @@ export const ShoppingProvider = props => {
         setCoupon,
         couponId,
         setCouponId,
-        customerCoupons
+        customerCoupons,
+        logoutUser
     }
 
     if(productList) {

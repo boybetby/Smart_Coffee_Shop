@@ -42,7 +42,7 @@ const getCouponsByCustomerId = async(req, res) => {
     })
     if(!couponsById) {
       res.status(202).json({
-        success: true,
+        success: false,
         coupons: []
       })
     } 
@@ -72,8 +72,16 @@ const getCouponsByCustomerId = async(req, res) => {
 const findCoupon = async (req, res) => {
   try {
     const {couponId} = req.body
-
-    const coupon = await couponModel.findById(couponId)
+    var date = new Date();
+    const coupon = await couponModel.findOne({
+      _id: couponId,
+      startDate: {
+        $lte: date
+      },
+      endDate: {
+        $gte: date
+      }
+    })
     if(coupon) {
       res.status(202).json({ 
         success: true,
@@ -81,7 +89,12 @@ const findCoupon = async (req, res) => {
       });
     }
     else {
-      const customerCoupon = await customerCouponModel.findById(couponId)
+      const customerCoupon = await customerCouponModel.findOne({
+        _id: couponId,
+        expiredDate: {
+          $gte: date
+        }
+      })
       if(customerCoupon) {
         const coupon = await couponModel.findById(customerCoupon.couponId)
         res.status(202).json({ 
@@ -89,14 +102,15 @@ const findCoupon = async (req, res) => {
           coupon: coupon 
         });
       } else {
-        res.status(404).json({ 
+        res.status(200).json({ 
           success: false,
           message: 'Invalid coupon'
         });
       }
     }
   }catch (err){
-    res.status(500).json({ 
+    res.status(500).json({
+      success: false, 
       error: err,
       message: 'Internal server error'
     });

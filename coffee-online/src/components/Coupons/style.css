@@ -58,3 +58,17 @@
 	border: none;
 	box-shadow: none;
 }
+
+.btn_logout {
+    position: absolute;
+    bottom: 10px;
+}
+
+.btn_logout h5 {
+    color: gray;
+}
+
+.btn_logout h5:hover {
+    color:green !important;
+    cursor: pointer; 
+}

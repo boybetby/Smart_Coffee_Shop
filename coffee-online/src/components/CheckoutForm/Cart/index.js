@@ -6,7 +6,7 @@ import swal from 'sweetalert'
 import './style.css'
 
 const Cart = () => {
-    const { cartProducts, orderType, setOrderType, coupon, setCoupon, couponId, setCouponId } = useContext(ShoppingContext)
+    const { customer, cartProducts, orderType, setOrderType, coupon, setCoupon, couponId, setCouponId } = useContext(ShoppingContext)
     
     const handleOrderType = (event) => {
         setOrderType(event.target.value);
@@ -25,8 +25,17 @@ const Cart = () => {
                     "couponId": couponId
                 }
             });
+            
             if(response.data.success) {
-                if(response.data.coupon.conditionValue <= calculateTotal() || response.data.coupon.usage === 'NEXT')
+                if(response.data.coupon.applyTo === 'ACCOUNT' && !customer._id) {
+                    swal({
+                        title: "FALSE!",
+                        text: "You have to login to use this coupon",
+                        icon: "warning",
+                        button: "OK",
+                    })
+                }
+                else if(response.data.coupon.conditionValue <= calculateTotal() || response.data.coupon.usage === 'NEXT')
                         setCoupon(response.data.coupon)
                 else {
                     swal({
@@ -36,6 +45,13 @@ const Cart = () => {
                         button: "OK",
                     })
                 }
+            } else {
+                swal({
+                    title: "FALSE!",
+                    text: "Invalid coupon",
+                    icon: "warning",
+                    button: "OK",
+                })
             }
         } catch (error) {
             console.log(error)
@@ -86,7 +102,7 @@ const Cart = () => {
                         <p><b>TOTAL:</b></p>
                     </div>
                     <div className='cart-amount'>
-                        <p><b>{finalPrice} VND</b></p>
+                        {(coupon)?(<p style={{color: 'green'}}><b>{finalPrice} VND</b></p>) : (<p><b>{finalPrice} VND</b></p>)}
                     </div>    
                 </div>
                 <div className='cart-info'>
