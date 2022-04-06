@@ -49,9 +49,6 @@ app.use('/api/user', handleRequest, userRouter)
 app.use('/api/coupon', handleRequest, couponRouter)
 
 //@admin
-// var server = app.listen();
-// server.setTimeout(9000000000000);
-
 app.use('/api/admin', handleRequest, adminRouter)
 app.use('/trainingFaceRecognition', trainingStart)
 app.use('/trainingProductRecommendation', main)
@@ -61,3 +58,23 @@ app.use('/drinks', express.static('drinks'));
 app.listen(PORT, () => {
     console.log(`Server running on PORT ${PORT}`)
 })
+
+const schedule = require('node-schedule');
+
+let FR_hour = '00'
+let FR_minute = '00'
+let FR_time = `${FR_minute} ${FR_hour} * * *`
+const time_trainningfacerecognition = schedule.scheduleJob(FR_time, function(){
+  console.log('training face regcognition start');
+  trainingStart
+  console.log('training face regcognition end');
+});
+
+let PR_hour = '00'
+let PR_minute = '00'
+let PR_time = `${PR_minute} ${PR_hour} * * *`
+const time_trainingproductrecommendation = schedule.scheduleJob(PR_time, function(){
+    console.log('training product recommendation start');
+    main
+    console.log('training product recommendation end');
+});

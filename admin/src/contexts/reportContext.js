@@ -8,6 +8,7 @@ import {
     GET_PRODUCTS_REPORT,
     GET_ORDERS_REPORT,
     GET_CUSTOMERS_REPORT,
+    GET_USERS_REPORT,
     SEARCH_PRODUCTS
 }from '../reducers/constants'
 
@@ -122,6 +123,18 @@ const ReportContextProvider = ({ children }) => {
         }
     }
 
+    const getUsersReport = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/users`)
+            if (response.data.success) {
+				dispatch({ type: GET_USERS_REPORT, payload: response.data.users })
+			}
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
+
     const updateProduct = async(updatedProduct) => {
         try {
             const response = await axios({
@@ -142,7 +155,8 @@ const ReportContextProvider = ({ children }) => {
         getIncomeReportByFilter(7, 'DAY'),
         getProductsReport(),
         getOrdersReport(),
-        getCustomersReport()
+        getCustomersReport(),
+        getUsersReport()
     }, [])
 
     const reportContextData = {

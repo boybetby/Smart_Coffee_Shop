@@ -16,4 +16,6 @@ router.get('/orders', report.getOrdersReport);
 
 router.get('/customers', report.getCustomersReport);
 
+router.get('/users', report.getUsersReport);
+
 module.exports = router

@@ -1,6 +1,7 @@
 const orderModel = require('../models/order') 
 const customerModel = require('../models/customer')
 const drinkModel = require('../models/drink')
+const userModel = require('../models/user')
 const { startOfDay, endOfDay, startOfMonth, endOfMonth } = require('date-fns')
 const Sugar = require('sugar')
 
@@ -235,6 +236,21 @@ const getCustomersReport = async(req, res) =>  {
     }
 }
 
+const getUsersReport = async(req, res) => {
+    try {
+        const users = await userModel.find()
+        res.status(202).json({
+            success: true,
+            users
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
 const updateProduct = async(req, res) => {
     try {
         const {updatedProduct} = req.body
@@ -263,7 +279,8 @@ const report = {
     getProductsReport,
     getOrdersReport,
     getCustomersReport,
-    updateProduct
+    updateProduct,
+    getUsersReport
 }
 
 module.exports = report
