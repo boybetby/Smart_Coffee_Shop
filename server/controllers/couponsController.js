@@ -119,7 +119,8 @@ const findCoupon = async (req, res) => {
 
 const createCoupon = async (req, res) => {
   try {
-    const data = req.body;
+    const data = req.body.newCoupon;
+
     let newCoupon = new couponModel(data)
 
     await newCoupon.save();
@@ -129,6 +130,7 @@ const createCoupon = async (req, res) => {
       coupon: newCoupon
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err});
   }
 };

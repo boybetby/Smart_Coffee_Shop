@@ -9,6 +9,7 @@ import { Selector as SelectorIcon } from '../icons/selector';
 import { ShoppingBag as ShoppingBagIcon } from '../icons/shopping-bag';
 import { User as UserIcon } from '../icons/user';
 import { Users as UsersIcon } from '../icons/users';
+import { Selector as Coupon } from '../icons/selector';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 import { useContext } from 'react';
@@ -42,6 +43,11 @@ export const DashboardSidebar = (props) => {
       href: '/products',
       icon: (<ShoppingBagIcon fontSize="small" />),
       title: 'Products'
+    },
+    {
+      href: '/coupon',
+      icon: (<Coupon fontSize="small" />),
+      title: 'Coupons'
     },
     {
       href: '/data',

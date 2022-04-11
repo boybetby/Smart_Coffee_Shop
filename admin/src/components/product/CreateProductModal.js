@@ -10,8 +10,6 @@ const CreateProductModal = (props) => {
 
     const [ newProduct, setNewProduct ] = useState()
 
-    console.log(newProduct)
-
     const handleChange = (e) => {
         if(e.type === 'file') {
             setNewProduct({ ...newProduct, [e.name]: e.files[0] })

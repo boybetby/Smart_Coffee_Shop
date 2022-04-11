@@ -4,6 +4,7 @@ import {
     GET_PRODUCTS_REPORT,
     GET_ORDERS_REPORT,
     GET_CUSTOMERS_REPORT,
+    GET_COUPONS_REPORT,
     SEARCH_PRODUCTS,
     GET_USERS_REPORT
 } from './constants'
@@ -47,6 +48,12 @@ const reportReducer = (state, action) => {
                 ...state,
                 usersReport: payload,
                 usersReportLoading: false
+            }
+        case GET_COUPONS_REPORT:
+            return {
+                ...state,
+                couponsReport: payload,
+                couponsReportLoading: false
             }
         case SEARCH_PRODUCTS:
             return {

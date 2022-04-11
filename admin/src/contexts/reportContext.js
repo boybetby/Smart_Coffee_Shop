@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useReducer } from 'react'
 import reportReducer from '../reducers/reportReducer'
 import axios from 'axios'
+import moment from 'moment'
 import {
     apiUrl,
 	GET_INCOME_REPORT,
@@ -9,6 +10,7 @@ import {
     GET_ORDERS_REPORT,
     GET_CUSTOMERS_REPORT,
     GET_USERS_REPORT,
+    GET_COUPONS_REPORT,
     SEARCH_PRODUCTS
 }from '../reducers/constants'
 
@@ -26,7 +28,9 @@ const ReportContextProvider = ({ children }) => {
         ordersReport: null,
         ordersReportLoading: true,
         customersReport: null,
-        customersReportLoading: true
+        customersReportLoading: true,
+        couponsReport: null,
+        couponsReportLoading: true
 	})
 
     const getIncomeReport = async() => {
@@ -95,6 +99,17 @@ const ReportContextProvider = ({ children }) => {
         }
     }
 
+    const getCouponsReport = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/coupon/`)
+            if (response.data.success) {
+				dispatch({ type: GET_COUPONS_REPORT, payload: response.data })
+			}
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const formatVietnamese = (string) => {
         return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D')
     }
@@ -118,6 +133,24 @@ const ReportContextProvider = ({ children }) => {
                 data: formData
             });
             if(response.data.success) getProductsReport()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const createCoupon = async(newCoupon) => {
+        try {
+            newCoupon.startDate = moment(newCoupon.startDate).format('YYYY-MM-DDTHH:MM:SS');
+            newCoupon.endDate = moment(newCoupon.endDate).format('YYYY-MM-DDTHH:MM:SS');
+            console.log(newCoupon)
+            const response = await axios({
+                method: 'post',
+                url:  `${apiUrl}/api/coupon/createCoupon`,
+                data: {
+                    newCoupon
+                }
+            });
+            if(response.data.success) getCouponsReport()
         } catch (error) {
             console.log(error)
         }
@@ -165,9 +198,11 @@ const ReportContextProvider = ({ children }) => {
         getIncomeReportByFilter,
         getOrdersReport,
         getCustomersReport,
+        getCouponsReport,
         searchProducts,
         updateProduct,
-        createProduct
+        createProduct,
+        createCoupon
 	}
 
     return (
