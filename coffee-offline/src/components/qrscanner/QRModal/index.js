@@ -7,7 +7,7 @@ const QRModal = (props) => {
         <div>
               <Modal
                 {...props}
-                size="lg"
+                size="sm"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
                 >
@@ -17,7 +17,7 @@ const QRModal = (props) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Scanner />
+                    <Scanner onClick={props.onHide} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={props.onHide}>Close</Button>

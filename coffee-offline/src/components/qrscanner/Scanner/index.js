@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import React, { useContext } from 'react'
+import { FaceContext } from '../../../contexts/FaceContext'
+import { Container } from 'react-bootstrap'
 import { QrReader } from 'react-qr-reader';
 
-const Scanner = () => {
-    const [data, setData] = useState('No result');
+const Scanner = ({onClick}) => {
+    const {
+        authCustomer
+    } = useContext(FaceContext)
+
+    const qrscanCustomer = async(id) => {
+        await authCustomer(id)
+        onClick()
+    }
 
     return (
         <Container style={{padding: "5px"}}>
-            <Row>
-                <Col>
+            
                 <QrReader
                     onResult={(result, error) => {
                     if (!!result) {
-                        setData(result?.text);
+                        qrscanCustomer(result?.text);
                     }
 
                     if (!!error) {
@@ -22,11 +29,6 @@ const Scanner = () => {
                     style={{ width: '100%' }}
                 />
                 
-                </Col>
-                <Col xs={7}>
-                    <p>{data}</p>
-                </Col>
-            </Row>
             </Container>
     )
 }

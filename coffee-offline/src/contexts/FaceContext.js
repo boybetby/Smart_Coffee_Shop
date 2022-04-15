@@ -92,6 +92,25 @@ const FaceContextProvider = ({ children }) => {
         }
     }
 
+    const authCustomer = async(token) => {
+        try {
+            if (token) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            } else {
+                delete axios.defaults.headers.common['Authorization']
+            }
+            const response = await axios.get(`${apiUrl}/api/customer/auth`)
+            if(response.data.success) {
+                dispatch({ type: DETECT_FACE, payload: response.data })
+                dispatch({ type: DETECTING, payload: false })
+                getCustomerInfo(response.data.customer._id)
+                delete axios.defaults.headers.common['Authorization']
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         getFaceData()
     }, [])
@@ -182,7 +201,8 @@ const FaceContextProvider = ({ children }) => {
         getCustomerInfo,
         clearCustomerState,
         getCustomersRecommendation,
-        newFaceDetected
+        newFaceDetected,
+        authCustomer
     }
 
     return (
