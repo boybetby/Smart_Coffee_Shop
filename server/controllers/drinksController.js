@@ -25,7 +25,7 @@ const getDrinksByCategory = async (req, res) => {
 
 const findDrink = async (req, res) => {
   try {
-    const {drinkId} = req.body
+    const {drinkId} = req.params
 
     const drink = await drinkModel.findOne({drinkId})
     if(!drink){

@@ -10,7 +10,7 @@ router.get('/', getDrinks);
 
 router.get('/findbycategory', getDrinksByCategory)
 
-router.get('/finddrink', findDrink);
+router.get('/detail/:id', findDrink);
 
 router.post('/', upload.array('drinkImage'), createDrink);
 

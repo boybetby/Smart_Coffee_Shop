@@ -6,7 +6,6 @@ import AuthContextProvider from './contexts/AuthContext';
 import LoginView from './views/LoginView'
 import MenuView from './views/MenuView';
 
-
 function App() {
   return (
     <AuthContextProvider>

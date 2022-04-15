@@ -1,0 +1,8 @@
+.qrscanner {
+    display: grid;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+    justify-items: stretch;
+    margin: 10px 0;
+}
