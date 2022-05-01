@@ -84,11 +84,6 @@ export const DashboardSidebar = (props) => {
         title: 'Dashboard'
       },
       {
-        href: '/customers',
-        icon: (<UsersIcon fontSize="small" />),
-        title: 'Customers'
-      },
-      {
         href: '/products',
         icon: (<ShoppingBagIcon fontSize="small" />),
         title: 'Products'

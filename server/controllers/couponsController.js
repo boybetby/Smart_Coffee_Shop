@@ -159,7 +159,6 @@ const checkCouponCondition = async(req, res) => {
       const data = req.body
       const customer = await customerModel.findOne({username: data.customer})
       const find = await customerCouponModel.find({customerId: customer._id, isCreated: true})
-      console.log(find)
       const coupons = []
       var date = new Date();
       try {   
