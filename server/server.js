@@ -20,7 +20,7 @@ const customerCoupon = require('./models/customerCoupon')
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(`you string`)
+        await mongoose.connect(`your string`)
         console.log('MongoDB connected')
     } catch (error) {
         console.log(error.message)
