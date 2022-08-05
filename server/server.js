@@ -20,7 +20,7 @@ const customerCoupon = require('./models/customerCoupon')
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@merndemo.gjvma.mongodb.net/MERNdemo?retryWrites=true&w=majority`)
+        await mongoose.connect(`you string`)
         console.log('MongoDB connected')
     } catch (error) {
         console.log(error.message)
